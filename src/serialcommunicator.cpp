@@ -1,6 +1,6 @@
 #include "serialcommunicator.h"
 
-SerialCommunicator(QtCharts::QSplineSeries* qss)
+SerialCommunicator::SerialCommunicator(QtCharts::QSplineSeries* qss)
 {
     series = qss;
 
@@ -16,31 +16,24 @@ SerialCommunicator(QtCharts::QSplineSeries* qss)
     qsp->setStopBits(QSerialPort::OneStop);
     qsp->setFlowControl(QSerialPort::NoFlowControl);
 
-
-
     connect(qsp, SIGNAL(readyRead()), this, SLOT(SERIAL_INTERACT()));
 }
 
 void SerialCommunicator::SERIAL_INTERACT()
 {
-    int len = 8;
+    unsigned int len = 8;
     char * dat = new char[8]{" "};
-     qsp->read(dat,len);
+    qsp->read(dat,len);
     std::string s = "";
 
-    //if (dat[4] == '\r') qDebug() << dat[0] << dat[1] << dat[2] << dat[3] << dat[4] << dat[5] << dat[6]<< dat[7] << dat[8] << "\n------\n";
-    for (int i = 0; i < 3; ++i)
-    {
-        s.push_back(dat[i]);    }
-    int p;
+    for (unsigned int i = 0; i < 3; ++i) s.push_back(dat[i]);
+    unsigned int p;
 
- try{
-   p = stoi(s);
-   if (p>100){
-       ++bytes_read;
-       series->append(bytes_read,p);
-
-            }
-
+    try{
+           p = stoi(s);
+           if (p>100){
+           ++bytes_read;
+           series->append(bytes_read,p);
+       }
    } catch (std::invalid_argument & e) { return;}
 }

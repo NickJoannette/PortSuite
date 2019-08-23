@@ -51,21 +51,6 @@ MainWindow::MainWindow()
 
 }
 
-
-bool isADigit(std::string const & s)
-{
-
-    for (int i = 0; i < 3; ++i)
-    {
-
-    }
-    return false;
-}
-
-
-
-
-
 void MainWindow::LED_ONOFF_CLICKED()
 {
     if (!s_com->qsp->isOpen())s_com->qsp->open(QIODevice::WriteOnly);
@@ -123,5 +108,4 @@ void MainWindow::READ_CLICKED()
 {
    s_com->bytes_read = 0;
    series->clear();
-
 }
