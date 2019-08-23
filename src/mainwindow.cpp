@@ -9,17 +9,22 @@ MainWindow::MainWindow()
     s_com = new SerialCommunicator(series);
 
     // STYLE AND MAIN LAYOUT
-    setStyleSheet("background-color: darkblue");
+    setStyleSheet("background-color: saddlebrown");
     QWidget *topWidget = new QWidget;
-    top_box_layout = new QFormLayout(topWidget);
+    QWidget *comControlWidget = new QWidget;
+    top_box_layout = new QVBoxLayout(topWidget);
+    top_box_layout ->setSpacing(50);
     setLayout(top_box_layout);
 
     // COM BUTTON LAYOUT
-    com_button_layout = new QHBoxLayout();
+    QSpacerItem height_spacer_100(100,100);
+    com_button_layout = new QVBoxLayout(comControlWidget);
+   // com_button_layout->addItem(&height_spacer_100);
+    com_button_layout->setSpacing(5);
     com_button_layout->addWidget(&LED_ON);
     com_button_layout->addWidget(&FLICKER_LED);
     com_button_layout->addWidget(&READ_BUTTON);
-
+    LED_ON.setFixedSize(70,30);FLICKER_LED.setFixedSize(70,30);READ_BUTTON.setFixedSize(70,30);
 
     // CHART VIEW
 
@@ -43,7 +48,7 @@ MainWindow::MainWindow()
     chart->setTitleFont(font);
     chart->setTitle("E44 Hall Sensor");
 
-    // Customizing the Background
+    // Customizing the Chart Background
 
     chart->setBackgroundBrush(QBrush(Qt::white));
 
@@ -56,11 +61,11 @@ MainWindow::MainWindow()
     chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
     QSize chartviewsize;
-    chartView->setStyleSheet("background-color: 2a4d10");
+    chartView->setStyleSheet("background-color: cornsilk");
     chartviewsize.setHeight(350);
     chartviewsize.setWidth(600);
     chartView->setMinimumSize(chartviewsize);
-  //  chartView->chart()->setTheme(QChart::ChartThemeBlueNcs);
+   chartView->chart()->setTheme(QChart::ChartThemeBrownSand);
    // chartView->setStyleSheet("background-color: black; color: red;");
 
 
@@ -71,8 +76,13 @@ MainWindow::MainWindow()
     FLICKER_LED.setStyleSheet("padding: 3px; background-color: white; color: blue; border: 2px ridge black;");
     READ_BUTTON.setText("Clear Data");
     READ_BUTTON.setStyleSheet("padding: 3px; background-color: white; color: blue; border: 2px ridge black;");
-    top_box_layout->addRow(com_button_layout);
+
+    // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
     top_box_layout->addWidget(chartView);
+
+
+    top_box_layout->addWidget(comControlWidget);
+
 
     connect(&LED_ON,SIGNAL(clicked()),this,SLOT(LED_ONOFF_CLICKED()));
     connect(&FLICKER_LED,SIGNAL(clicked()),this,SLOT(FLICKER_LED_CLICKED()));

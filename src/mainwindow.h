@@ -36,13 +36,20 @@ private slots:
 
 private:
 
-    QHBoxLayout * com_button_layout;
-    QFormLayout * top_box_layout;
+    QVBoxLayout * com_button_layout;
+    QVBoxLayout * top_box_layout;
     QPushButton LED_ON;
     QPushButton FLICKER_LED;
     QPushButton READ_BUTTON;
     QTextBrowser res;
     bool LED1_IS_ON = false;
+
+    // UI SECTION LABELS
+    // coms
+    QLabel com_control_section_label;
+
+    // charts
+    QLabel charts_control_section_label;
 
 
 
