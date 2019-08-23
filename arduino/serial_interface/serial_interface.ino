@@ -6,6 +6,6 @@ Serial.begin(9600);
 
 void loop() {
   Serial.println(analogRead(Hall_Effect_In));
-
+  delay(25);
 
 }

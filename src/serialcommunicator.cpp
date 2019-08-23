@@ -33,7 +33,11 @@ void SerialCommunicator::SERIAL_INTERACT()
            p = stoi(s);
            if (p>100){
            ++bytes_read;
-           series->append(bytes_read,p);
+           qDebug() << "Sent: " << bytes_read << ", " << p << "\n";
+           emit(send_chart_data(bytes_read, p));
+
        }
    } catch (std::invalid_argument & e) { return;}
 }
+
+

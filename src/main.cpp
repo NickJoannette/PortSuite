@@ -9,7 +9,15 @@ int main(int argc, char *argv[])
 
 
     MainWindow w;
-    w.resize(350,600);
+    w.setWindowTitle("Arduino to Qt Serial Interface");
+    w.resize(600,300);
     w.show();
+    w.setGeometry(
+                      QStyle::alignedRect(
+                          Qt::LeftToRight,
+                          Qt::AlignCenter,
+                          w.size(),
+                          qApp->desktop()->availableGeometry()
+                      ));
     return a.exec();
 }

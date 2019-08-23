@@ -14,43 +14,79 @@ MainWindow::MainWindow()
     top_box_layout = new QFormLayout(topWidget);
     setLayout(top_box_layout);
 
+    // COM BUTTON LAYOUT
+    com_button_layout = new QHBoxLayout();
+    com_button_layout->addWidget(&LED_ON);
+    com_button_layout->addWidget(&FLICKER_LED);
+    com_button_layout->addWidget(&READ_BUTTON);
+
+
     // CHART VIEW
+
+    QFont font;
+     font.setPixelSize(24);
+
+     // Setting and customizing the series plot
      series = new QtCharts::QSplineSeries();
+     QPen pen(Qt::black);
+     pen.setWidth(2);
+     series->setPen(pen);
+
+     // Setting the chart
     QtCharts::QChart *chart;
     chart = new QtCharts::QChart();
     chart->legend()->hide();
     chart->addSeries(series);
-    chart->setTitle("V");
+
+    // Customizing the Title
+    chart->setTitleBrush(QBrush(Qt::black));
+    chart->setTitleFont(font);
+    chart->setTitle("E44 Hall Sensor");
+
+    // Customizing the Background
+
+    chart->setBackgroundBrush(QBrush(Qt::white));
+
+    //
     chart->createDefaultAxes();
     chart->axes(Qt::Horizontal).first()->setRange(0,200);
-    chart->axes(Qt::Vertical).first()->setRange(0, 1000);
+    chart->axes(Qt::Vertical).first()->setRange(0, 400);
+    chart->axes(Qt::Horizontal).first()->setTitleText("Bytes Received");
+    chart->axes(Qt::Vertical).first()->setTitleText("Relative Voltage Signal");
     chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
     QSize chartviewsize;
-    chartView->setStyleSheet("background_color: 2a4d10");
+    chartView->setStyleSheet("background-color: 2a4d10");
     chartviewsize.setHeight(350);
     chartviewsize.setWidth(600);
     chartView->setMinimumSize(chartviewsize);
-    chartView->chart()->setTheme(QChart::ChartThemeDark);
+  //  chartView->chart()->setTheme(QChart::ChartThemeBlueNcs);
+   // chartView->setStyleSheet("background-color: black; color: red;");
+
 
     // LED SETTINGS
-    LED_ON.setText("On/Off");
-    FLICKER_LED.setText("Flicker the LED");
-    LED_ON.setStyleSheet("padding: 3px; background-color: #505050; color: #ffffff; border: 2px ridge black;");
-    FLICKER_LED.setStyleSheet("padding: 3px; background-color: #505050; color: #ffffff; border: 2px ridge black;");
-    READ_BUTTON.setText("Read Wave");
-    READ_BUTTON.setStyleSheet("padding: 3px; background-color: #505050; color: #e0e0e0; border: 2px ridge black;");
-    top_box_layout->addWidget(&LED_ON);
-    top_box_layout->addWidget(&FLICKER_LED);
-    top_box_layout->addWidget(&READ_BUTTON);
+    LED_ON.setText("Open COM4");
+    FLICKER_LED.setText("Close COM4");
+    LED_ON.setStyleSheet("padding: 3px; background-color: white; color: blue; border: 2px ridge black;");
+    FLICKER_LED.setStyleSheet("padding: 3px; background-color: white; color: blue; border: 2px ridge black;");
+    READ_BUTTON.setText("Clear Data");
+    READ_BUTTON.setStyleSheet("padding: 3px; background-color: white; color: blue; border: 2px ridge black;");
+    top_box_layout->addRow(com_button_layout);
     top_box_layout->addWidget(chartView);
 
     connect(&LED_ON,SIGNAL(clicked()),this,SLOT(LED_ONOFF_CLICKED()));
     connect(&FLICKER_LED,SIGNAL(clicked()),this,SLOT(FLICKER_LED_CLICKED()));
     connect(&READ_BUTTON,SIGNAL(clicked()),this,SLOT(READ_CLICKED()));
-
+    connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
 }
 
+
+void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
+{
+    qDebug() << "Received: " << br << ", " << d << "\n";
+
+    series->append(br, d);
+}
 void MainWindow::LED_ONOFF_CLICKED()
 {
     if (!s_com->qsp->isOpen())s_com->qsp->open(QIODevice::WriteOnly);
@@ -85,9 +121,9 @@ void MainWindow::FLICKER_LED_CLICKED()
                 {
                         for (int i = 0; i < 10; ++i)
                         {
-                           if (!qsp->isOpen()) qsp->open(QIODevice::WriteOnly);
+                           if (!s_com->qsp->isOpen()) s_com->qsp->open(QIODevice::WriteOnly);
                            s_com->qsp->write(QByteArray("A"));
-                           s_com->sp->flush();
+                           s_com->qsp->flush();
 
                            s_com->qsp->close();
                            QThread::msleep(25);

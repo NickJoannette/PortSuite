@@ -32,10 +32,11 @@ private slots:
     void LED_ONOFF_CLICKED();
     void FLICKER_LED_CLICKED();
     void READ_CLICKED();
+    void receive_chart_data(unsigned int, unsigned int);
 
 private:
 
-
+    QHBoxLayout * com_button_layout;
     QFormLayout * top_box_layout;
     QPushButton LED_ON;
     QPushButton FLICKER_LED;
