@@ -38,7 +38,7 @@ private:
 
     QVBoxLayout * com_button_layout;
     QVBoxLayout * top_box_layout;
-    QHBoxLayout * comms_panel_layout;
+    QGridLayout * comms_panel_layout;
     QPushButton LED_ON;
     QPushButton FLICKER_LED;
     QPushButton READ_BUTTON;

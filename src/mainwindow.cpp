@@ -9,8 +9,9 @@ MainWindow::MainWindow()
     s_com = new SerialCommunicator(series);
 
     // STYLE AND MAIN LAYOUT
-    setStyleSheet("background-color: saddlebrown");
+    setStyleSheet("background-color: white");
     QWidget *topWidget = new QWidget;
+    topWidget->setStyleSheet("border:solid 4px black;");
     QWidget *comControlWidget = new QWidget;
     top_box_layout = new QVBoxLayout(topWidget);
     top_box_layout ->setSpacing(5);
@@ -18,7 +19,7 @@ MainWindow::MainWindow()
 
     // COM BUTTON LAYOUT
     QWidget *commsPanelWidget = new QWidget;
-    comms_panel_layout = new QHBoxLayout(commsPanelWidget);
+    comms_panel_layout = new QGridLayout(commsPanelWidget);
 
     // Setting comms log and other static memory member widgets' properties
     comms_log.setTextBackgroundColor(Qt::lightGray);
@@ -35,7 +36,7 @@ MainWindow::MainWindow()
     com_button_layout->addWidget(&LED_ON);
     com_button_layout->addWidget(&FLICKER_LED);
     com_button_layout->addWidget(&READ_BUTTON);
-    LED_ON.setFixedSize(70,30);FLICKER_LED.setFixedSize(70,30);READ_BUTTON.setFixedSize(70,30);
+    LED_ON.setFixedSize(80,35);FLICKER_LED.setFixedSize(80,35);READ_BUTTON.setFixedSize(80,35);
 
     // CHART VIEW
 
@@ -77,7 +78,7 @@ MainWindow::MainWindow()
     chartView->setMinimumSize(chartviewsize);
 
     // POST-THEME CUSTOMIZATIONS
-    chartView->chart()->setTheme(QChart::ChartThemeBrownSand);
+    chartView->chart()->setTheme(QChart::ChartThemeHighContrast);
     chart->setTitleBrush(QBrush(Qt::black));
     chart->setTitleFont(font);
 
@@ -85,12 +86,27 @@ MainWindow::MainWindow()
     // LED SETTINGS
     LED_ON.setText("Open COM4");
     FLICKER_LED.setText("Close COM4");
-    LED_ON.setStyleSheet("padding: 3px; background-color: darkgrey; color: black; border: 1px ridge black;");
-    FLICKER_LED.setStyleSheet("padding: 3px; background-color: darkgrey; color: black; border: 1px ridge black;");
+    LED_ON.setStyleSheet("padding: 3px; "
+                         "background-color: wheat; color: "
+                         "black; border-radius:15px; border: "
+                         "1px outset black;");
+
+    FLICKER_LED.setStyleSheet("padding: 3px; "
+                              "background-color: wheat; "
+                              "color: black;"
+                              "border-radius:15px;"
+                              " border: 1px outset black;");
+
     READ_BUTTON.setText("Clear Data");
-    READ_BUTTON.setStyleSheet("padding: 3px; background-color: darkgrey; color: black; border: 1px ridge black;");
+    READ_BUTTON.setStyleSheet("padding: 3px; "
+                              "background-color: wheat;"
+                              " color: black;"
+                              "border-radius:15px; "
+                              "border: 1px outset black;");
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
+
+
     top_box_layout->addWidget(chartView);
     comControlWidget->setMaximumWidth(200);
     comms_panel_layout->addWidget(comControlWidget); comms_panel_layout->addWidget(&comms_log);
