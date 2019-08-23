@@ -8,7 +8,7 @@ QT += gui
 QT += widgets
 QT += charts
 QT += serialport
-
+QT += multimedia
 # CONFIG += c++11 console
 
 CONFIG -= app_bundle
@@ -33,10 +33,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        serialcommunicator.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+        serialcommunicator.h
 
 FORMS += \
         mainwindow.ui
@@ -45,3 +47,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    s.mp3

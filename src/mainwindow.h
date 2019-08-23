@@ -8,8 +8,8 @@
 #include <QtCharts/QSplineSeries>
 #include <QtCharts/QtCharts>
 #include <QtCharts/QAbstractAxis>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
+#include "serialcommunicator.h"
+
 
 class MainWindow : public QWidget
 {
@@ -18,20 +18,43 @@ class MainWindow : public QWidget
 public:
 
     MainWindow();
+
+    bool formed(std::string const & s)
+   {
+       QString k;
+
+       if (s.find_first_of(".\r@a") != std::string::npos) return false;
+       else return true;
+   }
+
 private slots:
+
     void LED_ONOFF_CLICKED();
     void FLICKER_LED_CLICKED();
+    void READ_CLICKED();
+
 private:
 
 
-    QHBoxLayout * top_box_layout;
+    QFormLayout * top_box_layout;
     QPushButton LED_ON;
     QPushButton FLICKER_LED;
+    QPushButton READ_BUTTON;
+    QTextBrowser res;
     bool LED1_IS_ON = false;
 
 
-    // SERIAL COMMUNICATIONS
-    QSerialPort * qsp;
+
+    // DATA CHARTING
+    QChartView *chartView;
+    QtCharts::QChart *chart;
+    QtCharts::QSplineSeries* series;
+    QtCharts::QAreaSeries* evaluation_points;
+
+    // SERIAL INTERACTION
+
+    SerialCommunicator * s_com;
+
 
 };
 
