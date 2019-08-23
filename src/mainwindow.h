@@ -31,17 +31,16 @@ private slots:
 
     void LED_ONOFF_CLICKED();
     void FLICKER_LED_CLICKED();
-    void READ_CLICKED();
+    void CLEAR_CHART_CLICKED();
+    void RESET_DATA_CLICKED();
     void receive_chart_data(unsigned int, unsigned int);
 
 private:
 
     QVBoxLayout * com_button_layout;
     QVBoxLayout * top_box_layout;
-    QGridLayout * comms_panel_layout;
-    QPushButton LED_ON;
-    QPushButton FLICKER_LED;
-    QPushButton READ_BUTTON;
+    QHBoxLayout* comms_panel_layout;
+
     QTextBrowser res;
     bool LED1_IS_ON = false;
 
@@ -62,11 +61,29 @@ private:
 
     // SERIAL INTERACTION
 
+    // Layout Partition Labels
+
+    QLabel transmission_label;
+    QLabel reception_label;
+
+
+    // Buttons and variables
+    QPushButton LED_ON;
+    QPushButton FLICKER_LED;
+    QPushButton READ_BUTTON;
+    QPushButton RESET_DATA_BUTTON;
+    unsigned int total_bytes_read = 0;
+
     // Serial communicator
     SerialCommunicator * s_com;
 
     // Serial comms log text view
-    QTextBrowser comms_log;
+    QLabel comms_log;
+
+    // Serial Data Management
+    unsigned int data_value_sum = 0;
+    float average_data_value = 0;
+
 
 };
 

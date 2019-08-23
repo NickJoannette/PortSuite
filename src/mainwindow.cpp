@@ -4,6 +4,16 @@
 #include <iostream>
 MainWindow::MainWindow()
 {
+    // TOOLBAR SETUP
+    auto tb = new QToolBar();
+    tb->addAction("file");
+    tb->addAction("State");
+    auto dockLayout = new QVBoxLayout();
+    dockLayout->setMenuBar(tb);
+
+    auto dockContent = new QWidget();
+    dockContent->setLayout(dockLayout);
+
 
     // SERIAL COMM
     s_com = new SerialCommunicator(series);
@@ -17,26 +27,36 @@ MainWindow::MainWindow()
     top_box_layout ->setSpacing(5);
     setLayout(top_box_layout);
 
+
+
     // COM BUTTON LAYOUT
     QWidget *commsPanelWidget = new QWidget;
-    comms_panel_layout = new QGridLayout(commsPanelWidget);
+    comms_panel_layout = new QHBoxLayout(commsPanelWidget);
 
     // Setting comms log and other static memory member widgets' properties
-    comms_log.setTextBackgroundColor(Qt::lightGray);
-    comms_log.setStyleSheet("background-color: white; border: solid 1px black;float:left;");
-    comms_log.setText("Bytes received: 24");
-    comms_log.setFixedSize(100,50);
-    comms_panel_layout->setSpacing(5);
+
+    comms_log.setStyleSheet("font-size: 18px; color: black; background-color: white; border: solid 2px black;");
+    comms_log.setText("Bytes received: " + QString::number(total_bytes_read) + "\nMean value:\n");
+
+    comms_log.setFixedSize(200,150);
+    comms_panel_layout->setSpacing(0);
 
 
     QSpacerItem height_spacer_100(100,100);
     com_button_layout = new QVBoxLayout(comControlWidget);
    // com_button_layout->addItem(&height_spacer_100);
+    transmission_label.setText("Transmission |");
+    reception_label.setText("Reception |");
+
+
     com_button_layout->setSpacing(0);
     com_button_layout->addWidget(&LED_ON);
     com_button_layout->addWidget(&FLICKER_LED);
     com_button_layout->addWidget(&READ_BUTTON);
+    com_button_layout->addWidget(&RESET_DATA_BUTTON);
+
     LED_ON.setFixedSize(80,35);FLICKER_LED.setFixedSize(80,35);READ_BUTTON.setFixedSize(80,35);
+    RESET_DATA_BUTTON.setFixedSize(80,35);
 
     // CHART VIEW
 
@@ -82,7 +102,6 @@ MainWindow::MainWindow()
     chart->setTitleBrush(QBrush(Qt::black));
     chart->setTitleFont(font);
 
-
     // LED SETTINGS
     LED_ON.setText("Open COM4");
     FLICKER_LED.setText("Close COM4");
@@ -104,6 +123,14 @@ MainWindow::MainWindow()
                               "border-radius:15px; "
                               "border: 1px outset black;");
 
+    RESET_DATA_BUTTON.setText("RESET DATA");
+    RESET_DATA_BUTTON.setStyleSheet("padding: 3px; "
+                                    "font-weight: 2px;"
+                              "background-color: firebrick;"
+                              " color: white;"
+                              "border-radius:15px; "
+                              "border: 1px outset black;");
+
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
 
@@ -114,7 +141,8 @@ MainWindow::MainWindow()
 
     connect(&LED_ON,SIGNAL(clicked()),s_com,SLOT(Open_COM4()));
     connect(&FLICKER_LED,SIGNAL(clicked()),s_com,SLOT(Close_COM4()));
-    connect(&READ_BUTTON,SIGNAL(clicked()),this,SLOT(READ_CLICKED()));
+    connect(&READ_BUTTON,SIGNAL(clicked()),this,SLOT(CLEAR_CHART_CLICKED()));
+    connect(&RESET_DATA_BUTTON,SIGNAL(clicked()),this,SLOT(RESET_DATA_CLICKED()));
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
 }
 
@@ -122,8 +150,12 @@ MainWindow::MainWindow()
 void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
 {
     qDebug() << "Received: " << br << ", " << d << "\n";
-
+    total_bytes_read+=1;
     series->append(br, d);
+    data_value_sum+=d;
+    average_data_value = data_value_sum/total_bytes_read;
+    comms_log.setText("Bytes received: " + QString::number(total_bytes_read) +
+                      "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
 void MainWindow::LED_ONOFF_CLICKED()
 {
@@ -178,8 +210,21 @@ void MainWindow::FLICKER_LED_CLICKED()
 
 }
 
-void MainWindow::READ_CLICKED()
+void MainWindow::CLEAR_CHART_CLICKED()
 {
    s_com->bytes_read = 0;
    series->clear();
+   comms_log.setText("Bytes received: " + QString::number(total_bytes_read) +
+                     "\nMean value: "  + QString::number(average_data_value) +"\n");
+}
+
+void MainWindow::RESET_DATA_CLICKED()
+{
+  // chartView->chart()->setTheme(QChart::ChartThemeDark);
+   total_bytes_read = 0;
+   data_value_sum = 0;
+   average_data_value = 0;
+   comms_log.setText("Bytes received: " + QString::number(total_bytes_read) +
+                     "\nMean value: "  + QString::number(average_data_value) +"\n");
+
 }

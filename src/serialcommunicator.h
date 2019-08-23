@@ -23,7 +23,6 @@ private slots:
     void Open_COM4();
     void Close_COM4();
 
-
 protected:
 
     // SERIAL COMMUNICATIONS
