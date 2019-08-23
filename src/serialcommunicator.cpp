@@ -8,13 +8,6 @@ SerialCommunicator::SerialCommunicator(QtCharts::QSplineSeries* qss)
     qsp = new QSerialPort(this);
     QSerialPortInfo COM4("COM4");
     qsp->setPort(COM4);
-    QIODevice::OpenMode mode(QIODevice::ReadOnly);
-    qsp->open(QIODevice::ReadOnly);
-    qsp->setBaudRate(QSerialPort::Baud9600);
-    qsp->setDataBits(QSerialPort::Data8);
-    qsp->setParity(QSerialPort::NoParity);
-    qsp->setStopBits(QSerialPort::OneStop);
-    qsp->setFlowControl(QSerialPort::NoFlowControl);
 
     connect(qsp, SIGNAL(readyRead()), this, SLOT(SERIAL_INTERACT()));
 }
@@ -41,3 +34,20 @@ void SerialCommunicator::SERIAL_INTERACT()
 }
 
 
+void SerialCommunicator::Open_COM4()
+{
+    QIODevice::OpenMode mode(QIODevice::ReadOnly);
+
+    qsp->open(QIODevice::ReadOnly);
+    qsp->setBaudRate(QSerialPort::Baud9600);
+    qsp->setDataBits(QSerialPort::Data8);
+    qsp->setParity(QSerialPort::NoParity);
+    qsp->setStopBits(QSerialPort::OneStop);
+    qsp->setFlowControl(QSerialPort::NoFlowControl);
+}
+
+void SerialCommunicator::Close_COM4()
+{
+    qsp->flush();
+    qsp->close();
+}

@@ -20,6 +20,9 @@ signals:
 private slots:
 
     void SERIAL_INTERACT();
+    void Open_COM4();
+    void Close_COM4();
+
 
 protected:
 

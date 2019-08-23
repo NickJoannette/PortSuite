@@ -96,8 +96,8 @@ MainWindow::MainWindow()
     comms_panel_layout->addWidget(comControlWidget); comms_panel_layout->addWidget(&comms_log);
     top_box_layout->addWidget(commsPanelWidget);
 
-    connect(&LED_ON,SIGNAL(clicked()),this,SLOT(LED_ONOFF_CLICKED()));
-    connect(&FLICKER_LED,SIGNAL(clicked()),this,SLOT(FLICKER_LED_CLICKED()));
+    connect(&LED_ON,SIGNAL(clicked()),s_com,SLOT(Open_COM4()));
+    connect(&FLICKER_LED,SIGNAL(clicked()),s_com,SLOT(Close_COM4()));
     connect(&READ_BUTTON,SIGNAL(clicked()),this,SLOT(READ_CLICKED()));
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
 }
