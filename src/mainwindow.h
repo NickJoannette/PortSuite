@@ -38,6 +38,7 @@ private:
 
     QVBoxLayout * com_button_layout;
     QVBoxLayout * top_box_layout;
+    QHBoxLayout * comms_panel_layout;
     QPushButton LED_ON;
     QPushButton FLICKER_LED;
     QPushButton READ_BUTTON;
@@ -61,8 +62,11 @@ private:
 
     // SERIAL INTERACTION
 
+    // Serial communicator
     SerialCommunicator * s_com;
 
+    // Serial comms log text view
+    QTextBrowser comms_log;
 
 };
 

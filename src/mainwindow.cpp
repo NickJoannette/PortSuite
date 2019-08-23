@@ -13,14 +13,25 @@ MainWindow::MainWindow()
     QWidget *topWidget = new QWidget;
     QWidget *comControlWidget = new QWidget;
     top_box_layout = new QVBoxLayout(topWidget);
-    top_box_layout ->setSpacing(50);
+    top_box_layout ->setSpacing(5);
     setLayout(top_box_layout);
 
     // COM BUTTON LAYOUT
+    QWidget *commsPanelWidget = new QWidget;
+    comms_panel_layout = new QHBoxLayout(commsPanelWidget);
+
+    // Setting comms log and other static memory member widgets' properties
+    comms_log.setTextBackgroundColor(Qt::lightGray);
+    comms_log.setStyleSheet("background-color: white; border: solid 1px black;float:left;");
+    comms_log.setText("Bytes received: 24");
+    comms_log.setFixedSize(100,50);
+    comms_panel_layout->setSpacing(5);
+
+
     QSpacerItem height_spacer_100(100,100);
     com_button_layout = new QVBoxLayout(comControlWidget);
    // com_button_layout->addItem(&height_spacer_100);
-    com_button_layout->setSpacing(5);
+    com_button_layout->setSpacing(0);
     com_button_layout->addWidget(&LED_ON);
     com_button_layout->addWidget(&FLICKER_LED);
     com_button_layout->addWidget(&READ_BUTTON);
@@ -43,9 +54,8 @@ MainWindow::MainWindow()
     chart->legend()->hide();
     chart->addSeries(series);
 
-    // Customizing the Title
-    chart->setTitleBrush(QBrush(Qt::black));
-    chart->setTitleFont(font);
+    // Setting the Title
+
     chart->setTitle("E44 Hall Sensor");
 
     // Customizing the Chart Background
@@ -65,24 +75,26 @@ MainWindow::MainWindow()
     chartviewsize.setHeight(350);
     chartviewsize.setWidth(600);
     chartView->setMinimumSize(chartviewsize);
-   chartView->chart()->setTheme(QChart::ChartThemeBrownSand);
-   // chartView->setStyleSheet("background-color: black; color: red;");
+
+    // POST-THEME CUSTOMIZATIONS
+    chartView->chart()->setTheme(QChart::ChartThemeBrownSand);
+    chart->setTitleBrush(QBrush(Qt::black));
+    chart->setTitleFont(font);
 
 
     // LED SETTINGS
     LED_ON.setText("Open COM4");
     FLICKER_LED.setText("Close COM4");
-    LED_ON.setStyleSheet("padding: 3px; background-color: white; color: blue; border: 2px ridge black;");
-    FLICKER_LED.setStyleSheet("padding: 3px; background-color: white; color: blue; border: 2px ridge black;");
+    LED_ON.setStyleSheet("padding: 3px; background-color: darkgrey; color: black; border: 1px ridge black;");
+    FLICKER_LED.setStyleSheet("padding: 3px; background-color: darkgrey; color: black; border: 1px ridge black;");
     READ_BUTTON.setText("Clear Data");
-    READ_BUTTON.setStyleSheet("padding: 3px; background-color: white; color: blue; border: 2px ridge black;");
+    READ_BUTTON.setStyleSheet("padding: 3px; background-color: darkgrey; color: black; border: 1px ridge black;");
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
     top_box_layout->addWidget(chartView);
-
-
-    top_box_layout->addWidget(comControlWidget);
-
+    comControlWidget->setMaximumWidth(200);
+    comms_panel_layout->addWidget(comControlWidget); comms_panel_layout->addWidget(&comms_log);
+    top_box_layout->addWidget(commsPanelWidget);
 
     connect(&LED_ON,SIGNAL(clicked()),this,SLOT(LED_ONOFF_CLICKED()));
     connect(&FLICKER_LED,SIGNAL(clicked()),this,SLOT(FLICKER_LED_CLICKED()));
