@@ -5,28 +5,30 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     // MENU BAR SETUP
+    // ITEMS
        m_pSubMenu = NULL;
        QMenuBar* pMenuBar = new QMenuBar(this);
-
        setMenuBar(pMenuBar);
-
        save_plot_action = new QAction("Save Plot",this);
-       setStyleSheet
-       ("QMenu{background-color:black; color:white;"
-        "border:1px solid  rgb(44,205,112);}"
-
-        "QMenu::item{spacing: 3px; padding: 10px;}"
-        "QMenu::item:selected{background-color: rgb(44,205,112);}"
-        );
-
        export_data_action = new QAction("Export Data", this);
        menu = new QMenu("File", this);
        menu->addAction(save_plot_action);
        menu->addAction(export_data_action);
+
        this->menuBar()->addMenu(menu);
 
 
+       // CUSTOMIZATION/ STYLES
+       setStyleSheet
+       ("QMenuBar::item:selected{background-color:green;}"
 
+        "QMenu{background-color:black; color:white;"
+        "border:1px solid  rgb(44,205,112);}"
+
+        "QMenu::item{spacing: 3px; padding: 10px;}"
+        "QMenu::item:selected{background-color: rgb(44,205,112);}"
+
+        );
 
        this->menuBar()->setStyleSheet("background-color:black; "
                                       "border-bottom:1px solid darkgreen; "
@@ -34,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
                                       );
 
        this->menuBar()->addSeparator();
+
 
     // SERIAL COMM
     s_com = new SerialCommunicator(series);
@@ -47,8 +50,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     top_box_layout = new QVBoxLayout(topWidget);
     top_box_layout ->setSpacing(5);
     topWidget->setLayout(top_box_layout);
-
-
     setCentralWidget(topWidget);
 
     // COMMS Customization
@@ -77,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     com_button_layout->addWidget(&FLICKER_LED);
     com_button_layout->addWidget(&READ_BUTTON);
     com_button_layout->addWidget(&RESET_DATA_BUTTON);
+    com_button_layout->setSpacing(5);
 
     OPEN_COM4.setFixedSize(80,35);FLICKER_LED.setFixedSize(80,35);READ_BUTTON.setFixedSize(80,35);
     RESET_DATA_BUTTON.setFixedSize(80,35);
@@ -114,42 +116,51 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
     QSize chartviewsize;
-    chartView->setStyleSheet("background-color: black");
+
     chartviewsize.setHeight(350);
     chartviewsize.setWidth(600);
     chartView->setMinimumSize(chartviewsize);
 
     // POST-THEME CUSTOMIZATIONS
     chartView->chart()->setTheme(QChart::ChartThemeDark);
+     chartView->setStyleSheet("background-color: black;");
+
     chart->setTitleBrush(QBrush(Qt::white));
     chart->setTitleFont(font);
+    chart->setDropShadowEnabled();
+    chart->setBackgroundRoundness(0);
+
+
 
     // BUTTON Customization
+
     OPEN_COM4.setText("Open COM4");
     FLICKER_LED.setText("Close COM4");
-    OPEN_COM4.setStyleSheet("padding: 3px; "
-                         "background-color: black; color: white; "
-                         "border:1px solid  rgb(44,205,112); "
+    OPEN_COM4.setStyleSheet(
+                        "QPushButton:hover{background-color: green; } "
+                         "QPushButton{padding: 3px; "
+                         "background-color: #242424; color: white; "
+                         "}"
                             );
 
-    FLICKER_LED.setStyleSheet("padding: 3px; "
-                              "background-color: black; color: white; "
-                              "border:1px solid  rgb(44,205,112); "
+    FLICKER_LED.setStyleSheet( "QPushButton:hover{background-color: green; } "
+                               "QPushButton{padding: 3px; "
+                               "background-color: #242424; color: white; "
+                               " }"
                                  );
 
     READ_BUTTON.setText("Clear Graph");
-    READ_BUTTON.setStyleSheet("padding: 3px; "
-                              "background-color: black; color: white; "
-                              "border:1px solid  rgb(44,205,112); "
+    READ_BUTTON.setStyleSheet( "QPushButton:hover{background-color: green; } "
+                               "QPushButton{padding: 3px; "
+                               "background-color: #242424; color: white; "
+                               " }"
                                  );
 
     RESET_DATA_BUTTON.setText("RESET DATA");
-    RESET_DATA_BUTTON.setStyleSheet("padding: 3px; "
-                                    "font-weight: 2px;"
-                              "background-color: darkgreen;"
-                              " color: white;"
-
-                              "border: 1px solid darkgrey;");
+    RESET_DATA_BUTTON.setStyleSheet("QPushButton:hover{background-color: maroon; } "
+                                    "QPushButton{padding: 3px; "
+                                    "background-color: firebrick; color: white; "
+                                    " }");
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
@@ -179,8 +190,11 @@ void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
 }
 void MainWindow::OPEN_COM4_CLICKED()
 {
+    OPEN_COM4.setStyleSheet("QPushButton{background-color:white;}"
+                            );
     if (!s_com->qsp->isOpen())s_com->qsp->open(QIODevice::ReadOnly);
-/*
+
+    /*
     if (s_com->qsp->isOpen() && s_com->qsp->isWritable())
                 {
                     QByteArray * ba;
