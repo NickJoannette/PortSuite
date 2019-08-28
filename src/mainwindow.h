@@ -9,15 +9,17 @@
 #include <QtCharts/QtCharts>
 #include <QtCharts/QAbstractAxis>
 #include "serialcommunicator.h"
+#include <QAction>
+#include <QMenu>
+#include <QMenuBar>
 
-
-class MainWindow : public QWidget
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
 
-    MainWindow();
+    explicit MainWindow(QWidget *parent = 0);
 
     bool formed(std::string const & s)
    {
@@ -34,6 +36,7 @@ private slots:
     void CLEAR_CHART_CLICKED();
     void RESET_DATA_CLICKED();
     void receive_chart_data(unsigned int, unsigned int);
+    void Move();
 
 private:
 
@@ -43,6 +46,11 @@ private:
 
     QTextBrowser res;
     bool LED1_IS_ON = false;
+
+    // MENU
+    QMenu* menu;
+     QAction *dummyaction;
+     QMenu* m_pSubMenu;
 
     // UI SECTION LABELS
     // coms

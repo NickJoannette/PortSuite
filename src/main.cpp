@@ -7,8 +7,9 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+    QWidget *mw = new QWidget;
 
-    MainWindow w;
+    MainWindow w(mw);
     w.setWindowTitle("Arduino to Qt Serial Interface");
     w.resize(800,800);
     w.show();

@@ -2,33 +2,34 @@
 #include <QPushButton>
 #include <QColor>
 #include <iostream>
-MainWindow::MainWindow()
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    // TOOLBAR SETUP
-    auto tb = new QToolBar();
-    tb->addAction("file");
-    tb->addAction("State");
-    auto dockLayout = new QVBoxLayout();
-    dockLayout->setMenuBar(tb);
 
-    auto dockContent = new QWidget();
-    dockContent->setLayout(dockLayout);
+      m_pSubMenu = NULL;
+       QMenuBar* pMenuBar = new QMenuBar(this);
+
+       setMenuBar(pMenuBar);
+
+       dummyaction = new QAction("Testing",this);
+       menu = new QMenu("Test", this);
+       menu->addAction(dummyaction);
+       this->menuBar()->addMenu(menu);
 
 
     // SERIAL COMM
     s_com = new SerialCommunicator(series);
 
     // STYLE AND MAIN LAYOUT
-    setStyleSheet("background-color: white");
+    parent->setStyleSheet("background-color: white");
     QWidget *topWidget = new QWidget;
     topWidget->setStyleSheet("border:solid 4px black;");
     QWidget *comControlWidget = new QWidget;
     top_box_layout = new QVBoxLayout(topWidget);
     top_box_layout ->setSpacing(5);
-    setLayout(top_box_layout);
+    topWidget->setLayout(top_box_layout);
 
 
-
+setCentralWidget(topWidget);
     // COM BUTTON LAYOUT
     QWidget *commsPanelWidget = new QWidget;
     comms_panel_layout = new QHBoxLayout(commsPanelWidget);
@@ -227,4 +228,14 @@ void MainWindow::RESET_DATA_CLICKED()
    comms_log.setText("Bytes received: " + QString::number(total_bytes_read) +
                      "\nMean value: "  + QString::number(average_data_value) +"\n");
 
+}
+
+
+void MainWindow::Move() {
+   if (!m_pSubMenu) {
+      m_pSubMenu = new QMenu(menu);
+      dummyaction->setMenu(m_pSubMenu);
+   }
+   QAction* pAction = new QAction("Test", this);
+   m_pSubMenu->addAction(pAction);
 }
