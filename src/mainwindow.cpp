@@ -70,8 +70,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     comms_log.setFixedSize(250,125);
     comms_panel_layout->setSpacing(0);
 
-
-    QSpacerItem height_spacer_100(100,100);
     com_button_layout = new QVBoxLayout(comControlWidget);
 
     transmission_label.setText("Transmission |");
@@ -144,7 +142,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     OPEN_COM4.setText("Open Port");
     FLICKER_LED.setText("Close Port");
     OPEN_COM4.setStyleSheet(
-                        "QPushButton:hover{background-color: green; } "
+                         "QPushButton:hover{background-color: green; } "
                          "QPushButton{padding: 3px; "
                          "background-color: black; color: white; "
                          "}"
@@ -174,9 +172,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     top_box_layout->addWidget(chartView);
 
-
+    //commsPanelWidget->setMaximumWidth(400);
+        comms_panel_layout->addStretch(300);
     comms_panel_layout->addWidget(comControlWidget); comms_panel_layout->addWidget(&comms_log);
-    comms_panel_layout->setSizeConstraint(QLayout::SetMinimumSize);
+    //comms_panel_layout->setSizeConstraint(QLayout::SetMinimumSize);
+    comms_panel_layout->addStretch(300);
     top_box_layout->addWidget(commsPanelWidget);
 
     connect(&OPEN_COM4,SIGNAL(clicked()),s_com,SLOT(Open_COM4()));
