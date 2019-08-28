@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
        port_menu->addAction(choose_port_action);
 
        this->menuBar()->addMenu(file_menu);
-           this->menuBar()->addMenu(port_menu);
+       this->menuBar()->addMenu(port_menu);
 
 
 
@@ -57,6 +57,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     top_box_layout ->setSpacing(5);
     topWidget->setLayout(top_box_layout);
     setCentralWidget(topWidget);
+
+
+    // SETTING UP THE DIALOGS
+       data_export_dialog = new QFileDialog(topWidget,Qt::WindowStaysOnTopHint);
 
     // COMMS Customization
 
@@ -191,6 +195,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(&READ_BUTTON,SIGNAL(clicked()),this,SLOT(CLEAR_CHART_CLICKED()));
     connect(&RESET_DATA_BUTTON,SIGNAL(clicked()),this,SLOT(RESET_DATA_CLICKED()));
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
+
+
+    // MENU CONNECTIONS
+    connect(file_menu, SIGNAL(triggered(QAction*)), this, SLOT(EXPORT_DATA_CLICKED(QAction*)));
 }
 
 
@@ -304,4 +312,11 @@ void MainWindow::RESET_DATA_CLICKED()
 }
 
 
+// MENU SLOTS
+
+void MainWindow::EXPORT_DATA_CLICKED(QAction* action)
+{
+    qDebug () << "Triggered: " << action->text();
+    data_export_dialog->show();
+}
 

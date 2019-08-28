@@ -36,6 +36,7 @@ private slots:
     void CLEAR_CHART_CLICKED();
     void RESET_DATA_CLICKED();
     void receive_chart_data(unsigned int, unsigned int);
+    void EXPORT_DATA_CLICKED(QAction* action);
 
 
 private:
@@ -53,6 +54,9 @@ private:
     QAction *save_plot_action, *export_data_action;
     QAction *choose_port_action;
     QMenu* m_pSubMenu;
+
+    // MENU DIALOGS
+    QFileDialog* data_export_dialog;
 
     // UI SECTION LABELS
     // coms
