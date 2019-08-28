@@ -3,6 +3,6 @@ Re-usable class structure and cross-platform application for reading serial port
 Allows the user to export the two dimensional data as .xls, .csv, and .json. 
 
 <html>
-<div style="text-align:center">
-<img src="https://raw.githubusercontent.com/NickJoannette/PortSuite/master/images/PortSuite.png"></div>
+<center>
+<img src="https://raw.githubusercontent.com/NickJoannette/PortSuite/master/images/PortSuite.png"></center>
 </html>
