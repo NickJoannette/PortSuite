@@ -32,7 +32,7 @@ public:
 private slots:
 
     void OPEN_COM4_CLICKED();
-    void FLICKER_LED_CLICKED();
+    void CLOSE_COM4_CLICKED();
     void CLEAR_CHART_CLICKED();
     void RESET_DATA_CLICKED();
     void receive_chart_data(unsigned int, unsigned int);
@@ -48,8 +48,10 @@ private:
     bool LED1_IS_ON = false;
 
     // MENU
-    QMenu* menu;
+    QMenu* file_menu;
+    QMenu* port_menu;
     QAction *save_plot_action, *export_data_action;
+    QAction *choose_port_action;
     QMenu* m_pSubMenu;
 
     // UI SECTION LABELS

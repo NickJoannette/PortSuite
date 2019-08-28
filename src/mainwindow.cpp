@@ -10,13 +10,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
        QMenuBar* pMenuBar = new QMenuBar(this);
        setMenuBar(pMenuBar);
        save_plot_action = new QAction("Save Plot",this);
-       export_data_action = new QAction("Export Data", this);
-       menu = new QMenu("File", this);
-       menu->addAction(save_plot_action);
-       menu->addAction(export_data_action);
+       export_data_action = new QAction("Export Data",this);
+       file_menu = new QMenu("File", this);
+       file_menu->addAction(save_plot_action);
+       file_menu->addAction(export_data_action);
+       choose_port_action = new QAction("Choose port...",this);
+       port_menu = new QMenu("Port", this);
+       port_menu->addAction(choose_port_action);
 
-       this->menuBar()->addMenu(menu);
-
+       this->menuBar()->addMenu(file_menu);
+           this->menuBar()->addMenu(port_menu);
+       pMenuBar->insertSeparator(export_data_action);
 
        // CUSTOMIZATION/ STYLES
        setStyleSheet
@@ -60,9 +64,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // Setting comms log and other static memory member widgets' properties
 
     comms_log.setStyleSheet("padding:5px; font-size: 12px; color: white; background-color: black; border:1px solid  rgb(44,205,112);");
-    comms_log.setText("Bytes received: " + QString::number(total_bytes_read) + "\nMean value:\n");
-
-    comms_log.setFixedSize(150,80);
+    comms_log.setText("Port Status: \n"
+                      "Bytes received: " + QString::number(total_bytes_read) +
+                      "\nMean value: "  + QString::number(average_data_value) +"\n");
+    comms_log.setFixedSize(250,125);
     comms_panel_layout->setSpacing(0);
 
 
@@ -90,9 +95,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
      // Setting and customizing the series plot
      series = new QtCharts::QSplineSeries();
-     QPen pen(Qt::black);
+     QColor darkgreen;
+     darkgreen.setRgb(44,205,112);
+     QPen pen(darkgreen);
      pen.setWidth(2);
-     series->setPen(pen);
+
 
      // Setting the chart
     QtCharts::QChart *chart;
@@ -124,7 +131,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // POST-THEME CUSTOMIZATIONS
     chartView->chart()->setTheme(QChart::ChartThemeDark);
      chartView->setStyleSheet("background-color: black;");
-
+    series->setPen(pen);
     chart->setTitleBrush(QBrush(Qt::white));
     chart->setTitleFont(font);
     chart->setDropShadowEnabled();
@@ -134,44 +141,50 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // BUTTON Customization
 
-    OPEN_COM4.setText("Open COM4");
-    FLICKER_LED.setText("Close COM4");
+    OPEN_COM4.setText("Open Port");
+    FLICKER_LED.setText("Close Port");
     OPEN_COM4.setStyleSheet(
                         "QPushButton:hover{background-color: green; } "
                          "QPushButton{padding: 3px; "
-                         "background-color: #242424; color: white; "
+                         "background-color: black; color: white; "
                          "}"
                             );
 
     FLICKER_LED.setStyleSheet( "QPushButton:hover{background-color: green; } "
                                "QPushButton{padding: 3px; "
-                               "background-color: #242424; color: white; "
+                               "background-color: black; color: white; "
                                " }"
                                  );
 
     READ_BUTTON.setText("Clear Graph");
     READ_BUTTON.setStyleSheet( "QPushButton:hover{background-color: green; } "
                                "QPushButton{padding: 3px; "
-                               "background-color: #242424; color: white; "
+                               "background-color: black; color: white; "
                                " }"
                                  );
 
     RESET_DATA_BUTTON.setText("RESET DATA");
-    RESET_DATA_BUTTON.setStyleSheet("QPushButton:hover{background-color: maroon; } "
+    RESET_DATA_BUTTON.setStyleSheet("QPushButton:hover{background-color: firebrick; } "
                                     "QPushButton{padding: 3px; "
-                                    "background-color: firebrick; color: white; "
+                                    "background-color: maroon; color: white; "
                                     " }");
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
 
     top_box_layout->addWidget(chartView);
-    comControlWidget->setMaximumWidth(200);
+
+
     comms_panel_layout->addWidget(comControlWidget); comms_panel_layout->addWidget(&comms_log);
+    comms_panel_layout->setSizeConstraint(QLayout::SetMinimumSize);
     top_box_layout->addWidget(commsPanelWidget);
 
     connect(&OPEN_COM4,SIGNAL(clicked()),s_com,SLOT(Open_COM4()));
+    connect(&OPEN_COM4,SIGNAL(clicked()),this,SLOT(OPEN_COM4_CLICKED()));
+
     connect(&FLICKER_LED,SIGNAL(clicked()),s_com,SLOT(Close_COM4()));
+    connect(&FLICKER_LED,SIGNAL(clicked()),this,SLOT(CLOSE_COM4_CLICKED()));
+
     connect(&READ_BUTTON,SIGNAL(clicked()),this,SLOT(CLEAR_CHART_CLICKED()));
     connect(&RESET_DATA_BUTTON,SIGNAL(clicked()),this,SLOT(RESET_DATA_CLICKED()));
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
@@ -185,14 +198,22 @@ void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
     series->append(br, d);
     data_value_sum+=d;
     average_data_value = data_value_sum/total_bytes_read;
-    comms_log.setText("Bytes received: " + QString::number(total_bytes_read) +
-                      "\nMean value: "  + QString::number(average_data_value) +"\n");
+    comms_log.setText("Port Status: OPEN\n"
+    "Bytes received: " + QString::number(total_bytes_read) +
+    "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
 void MainWindow::OPEN_COM4_CLICKED()
 {
-    OPEN_COM4.setStyleSheet("QPushButton{background-color:white;}"
+
+    OPEN_COM4.setStyleSheet(
+                               "QPushButton{padding: 3px; "
+                               "background-color: green; color: white; "
+                               "}"
                             );
     if (!s_com->qsp->isOpen())s_com->qsp->open(QIODevice::ReadOnly);
+    if (s_com->qsp->isOpen()) comms_log.setText("Port Status: OPEN\n"
+                                                "Bytes received: " + QString::number(total_bytes_read) +
+                                                "\nMean value: "  + QString::number(average_data_value) +"\n");
 
     /*
     if (s_com->qsp->isOpen() && s_com->qsp->isWritable())
@@ -217,11 +238,23 @@ void MainWindow::OPEN_COM4_CLICKED()
 
 }
 
-void MainWindow::FLICKER_LED_CLICKED()
+void MainWindow::CLOSE_COM4_CLICKED()
 {
-     if (!s_com->qsp->isOpen())s_com->qsp->open(QIODevice::WriteOnly);
 
-     if (s_com->qsp->isOpen() && s_com->qsp->isWritable())
+     if (s_com->qsp->isOpen())s_com->qsp->close();
+     if (!s_com->qsp->isOpen())
+     {
+         comms_log.setText("Port Status: CLOSED\n"
+                           "Bytes received: " + QString::number(total_bytes_read) +
+                           "\nMean value: "  + QString::number(average_data_value) +"\n");
+
+         OPEN_COM4.setStyleSheet("QPushButton:hover{background-color: green; } "
+          "QPushButton{padding: 3px; "
+          "background-color: black; color: white; "
+          "}");
+     }
+
+     /*  if (s_com->qsp->isOpen() && s_com->qsp->isWritable())
                 {
                         for (int i = 0; i < 10; ++i)
                         {
@@ -240,7 +273,7 @@ void MainWindow::FLICKER_LED_CLICKED()
 
                         }
 
-                }
+                }*/
 
 }
 
