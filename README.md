@@ -4,4 +4,4 @@ Allows the user to export the two dimensional data as .xls, .csv, and .json.
 
 
 
-<img src="https://raw.githubusercontent.com/NickJoannette/PortSuite/master/images/PortSuite.png" align="center">
+<img src="https://raw.githubusercontent.com/NickJoannette/PortSuite/master/images/PortSuite.png" style="align:center;">
