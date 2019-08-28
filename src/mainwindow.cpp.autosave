@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     // MENU BAR SETUP
     // ITEMS
-       m_pSubMenu = NULL;
+       m_pSubMenu = new QMenu("");
        QMenuBar* pMenuBar = new QMenuBar(this);
        setMenuBar(pMenuBar);
        save_plot_action = new QAction("Save Plot",this);
@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
        this->menuBar()->addMenu(file_menu);
            this->menuBar()->addMenu(port_menu);
-       file_menu->addAction(choose_port_action);
+       export_data_action->
 
 
 
