@@ -31,12 +31,12 @@ public:
 
 private slots:
 
-    void LED_ONOFF_CLICKED();
+    void OPEN_COM4_CLICKED();
     void FLICKER_LED_CLICKED();
     void CLEAR_CHART_CLICKED();
     void RESET_DATA_CLICKED();
     void receive_chart_data(unsigned int, unsigned int);
-    void Move();
+
 
 private:
 
@@ -49,8 +49,8 @@ private:
 
     // MENU
     QMenu* menu;
-     QAction *dummyaction;
-     QMenu* m_pSubMenu;
+    QAction *save_plot_action, *export_data_action;
+    QMenu* m_pSubMenu;
 
     // UI SECTION LABELS
     // coms
@@ -76,7 +76,7 @@ private:
 
 
     // Buttons and variables
-    QPushButton LED_ON;
+    QPushButton OPEN_COM4;
     QPushButton FLICKER_LED;
     QPushButton READ_BUTTON;
     QPushButton RESET_DATA_BUTTON;
