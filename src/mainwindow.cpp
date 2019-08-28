@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     // MENU BAR SETUP
     // ITEMS
-       m_pSubMenu = NULL;
+       m_pSubMenu = new QMenu("");
        QMenuBar* pMenuBar = new QMenuBar(this);
        setMenuBar(pMenuBar);
        save_plot_action = new QAction("Save Plot",this);
@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
        this->menuBar()->addMenu(file_menu);
            this->menuBar()->addMenu(port_menu);
-       file_menu->addAction(choose_port_action);
+
 
 
 
@@ -66,7 +66,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // Setting comms log and other static memory member widgets' properties
 
     comms_log.setStyleSheet("padding:5px; font-size: 12px; color: white; background-color: black; border:1px solid  rgb(44,205,112);");
-    comms_log.setText("Port Status: \n"
+    QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
+    comms_log.setText("Port Status: " + status +
                       "Bytes received: " + QString::number(total_bytes_read) +
                       "\nMean value: "  + QString::number(average_data_value) +"\n");
     comms_log.setFixedSize(250,125);
@@ -283,7 +284,9 @@ void MainWindow::CLEAR_CHART_CLICKED()
 {
    s_com->bytes_read = 0;
    series->clear();
-   comms_log.setText("Bytes received: " + QString::number(total_bytes_read) +
+   QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
+   comms_log.setText( "Port Status: " + status +
+                     "Bytes received: " + QString::number(total_bytes_read) +
                      "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
 
@@ -293,7 +296,9 @@ void MainWindow::RESET_DATA_CLICKED()
    total_bytes_read = 0;
    data_value_sum = 0;
    average_data_value = 0;
-   comms_log.setText("Bytes received: " + QString::number(total_bytes_read) +
+   QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
+   comms_log.setText( "Port Status: " + status +
+                     "Bytes received: " + QString::number(total_bytes_read) +
                      "\nMean value: "  + QString::number(average_data_value) +"\n");
 
 }
