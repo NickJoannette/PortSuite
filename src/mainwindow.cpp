@@ -9,9 +9,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
        m_pSubMenu = new QMenu("");
        QMenuBar* pMenuBar = new QMenuBar(this);
        setMenuBar(pMenuBar);
+
        save_plot_action = new QAction("Save Plot",this);
        export_data_action = new QAction("Export Data",this);
        file_menu = new QMenu("File", this);
+       file_menu->setMinimumHeight(30);
        file_menu->addAction(save_plot_action);
        file_menu->addAction(export_data_action);
        choose_port_action = new QAction("Choose port...",this);
@@ -60,8 +62,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
     // SETTING UP THE DIALOGS
-       data_export_dialog = new QFileDialog(topWidget,Qt::WindowStaysOnTopHint);
-
+       data_export_dialog = new QFileDialog(0,Qt::WindowStaysOnTopHint);
+       data_export_dialog->setLabelText(QFileDialog::Accept, tr("Save"));
+        data_export_dialog->setNameFilter(tr("Excel file (.xls .xlsx);;CSV file (.csv);;JSON file (.json)"));
+        data_export_dialog->setViewMode(QFileDialog::List);
+        data_export_dialog->setWindowTitle("Export data as...");
     // COMMS Customization
 
     QWidget *commsPanelWidget = new QWidget;
