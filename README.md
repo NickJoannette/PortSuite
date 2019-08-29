@@ -11,6 +11,6 @@ Features:
 * Selects a system port by name in the `Port > Choose Port...` menu
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/NickJoannette/PortSuite/master/images/serialcontrol_docked_dialog.PNG">
+<img src="https://raw.githubusercontent.com/NickJoannette/SerialControl/master/images/serialcontrol_docked_dialog.png">
   </p>
 
