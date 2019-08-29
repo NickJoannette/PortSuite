@@ -26,9 +26,11 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
        addMenu(port_menu);
 
        // CUSTOMIZATION/ STYLES
-      setStyleSheet
+      parent->setStyleSheet
        ("QMenuBar::item:selected{background-color:green;}"
-
+        "QMenuBar{background-color:black; "
+                                           "border-bottom:1px solid darkgreen; "
+                                           "color:white;}"
         "QMenu{background-color:black; color:white;"
         "border:1px solid  rgb(44,205,112);}"
 
@@ -37,10 +39,6 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
 
         );
 
-       setStyleSheet("background-color:black; "
-                                      "border-bottom:1px solid darkgreen; "
-                                      "color:white;"
-                                      );
 
        addSeparator();
 
