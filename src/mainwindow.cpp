@@ -155,7 +155,8 @@ void MainWindow::write_Reset()
      data_value_sum = 0;
      average_data_value = 0;
      QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
-     comms_log.setText( "Port Status: " + status +
+     comms_log.setText("Port: COM4\n"
+                       "Status: " + status +
                        "Bytes received: " + QString::number(total_bytes_read) +
                        "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
