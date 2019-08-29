@@ -5,26 +5,28 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     // MENU BAR SETUP
-    // ITEMS
+
+        // ITEMS
+
        m_pSubMenu = new QMenu("");
        QMenuBar* pMenuBar = new QMenuBar(this);
        setMenuBar(pMenuBar);
 
        save_plot_action = new QAction("Save Plot",this);
        export_data_action = new QAction("Export Data",this);
+
        file_menu = new QMenu("File", this);
        file_menu->setMinimumHeight(30);
        file_menu->addAction(save_plot_action);
        file_menu->addAction(export_data_action);
+
        choose_port_action = new QAction("Choose port...",this);
+
        port_menu = new QMenu("Port", this);
        port_menu->addAction(choose_port_action);
 
        this->menuBar()->addMenu(file_menu);
        this->menuBar()->addMenu(port_menu);
-
-
-
 
        // CUSTOMIZATION/ STYLES
        setStyleSheet
@@ -51,7 +53,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // STYLE AND MAIN LAYOUT
 
-
     QWidget *topWidget = new QWidget;
     topWidget->setStyleSheet("background-color:#474747;");
     QWidget *comControlWidget = new QWidget;
@@ -62,8 +63,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     topWidget->setLayout(top_box_layout);
     setCentralWidget(topWidget);
 
-
     // SETTING UP THE DIALOGS
+
     data_export_dialog = new ExportDialog();
     data_export_dialog->setMaximumHeight(200);
     // COMMS Customization
@@ -78,14 +79,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     comms_log.setText("Port Status: " + status +
                       "Bytes received: " + QString::number(total_bytes_read) +
                       "\nMean value: "  + QString::number(average_data_value) +"\n");
+
     comms_log.setFixedSize(250,125);
     comms_panel_layout->setSpacing(0);
-
     com_button_layout = new QVBoxLayout(comControlWidget);
 
     transmission_label.setText("Transmission |");
     reception_label.setText("Reception |");
-
 
     com_button_layout->setSpacing(0);
     com_button_layout->addWidget(&OPEN_COM4);
