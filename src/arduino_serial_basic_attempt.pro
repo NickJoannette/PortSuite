@@ -56,3 +56,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     s.mp3
+
+RC_ICONS = serialcontrol.ico

@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 
 
     MainWindow w;
-    w.setWindowTitle("Arduino to Qt Serial Interface");
+    w.setWindowTitle("Serial Control Beta");
      MainWindow x,y;
      x.show();
      y.show();
