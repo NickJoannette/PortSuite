@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     chart->setTitleFont(font);
     chart->setDropShadowEnabled();
     chart->setBackgroundRoundness(0);
-
+    //setWindowFlag(Qt::FramelessWindowHint);
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
@@ -99,6 +99,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     top_box_layout->addWidget(chartView);
     top_box_layout->addWidget(&comms_log);
 
+    QPixmap p = chartView->grab();
+    QOpenGLWidget *glWidget  = chartView->findChild<QOpenGLWidget*>();
+    if(glWidget){
+        QPainter painter(&p);
+        QPoint d = glWidget->mapToGlobal(QPoint())-chartView->mapToGlobal(QPoint());
+        painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+        painter.drawImage(d, glWidget->grabFramebuffer());
+        painter.end();
+    }
+
+    p.save("a.png", "PNG");
     // CONNECTING SIGNALS AND SLOTS
 
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
