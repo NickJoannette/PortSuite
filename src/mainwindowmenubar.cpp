@@ -26,7 +26,7 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
        addMenu(port_menu);
 
        // CUSTOMIZATION/ STYLES
-      parent->setStyleSheet
+        parent->setStyleSheet
        ("QMenuBar::item:selected{background-color:green;}"
         "QMenuBar{background-color:black; "
                                            "border-bottom:1px solid darkgreen; "
@@ -40,15 +40,10 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
         );
 
 
-       addSeparator();
-
-
-
        // SETTING UP THE DIALOGS
 
        data_export_dialog = new ExportDialog();
        data_export_dialog->setMaximumHeight(200);
-
 
 
        // MENU CONNECTIONS

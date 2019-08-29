@@ -30,8 +30,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // COMMS Customization
 
-    QWidget *commsPanelWidget = new QWidget;
-    comms_panel_layout = new QHBoxLayout(commsPanelWidget);
+
+    comms_panel_layout = new QHBoxLayout();
 
     // Setting comms log and other static memory member widgets' properties
 
@@ -42,10 +42,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
                       "\nMean value: "  + QString::number(average_data_value) +"\n");
 
     comms_log.setFixedSize(250,125);
-    comms_panel_layout->setSpacing(0);
-    transmission_label.setText("Transmission |");
-    reception_label.setText("Reception |");
-
 
 
     // CHART VIEW
@@ -103,12 +99,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     top_box_layout->addWidget(chartView);
     top_box_layout->addWidget(&comms_log);
-    comms_panel_layout->addStretch(300);
-    //comms_panel_layout->addWidget(comControlWidget);
-   // comms_panel_layout->addWidget(&comms_log);
-    //comms_panel_layout->setSizeConstraint(QLayout::SetMinimumSize);
-    comms_panel_layout->addStretch(300);
-  //  top_box_layout->addWidget(commsPanelWidget);
 
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
     connect(pcbw, SIGNAL(CLOSE_CLICKED()),this, SLOT(write_Closed()));
