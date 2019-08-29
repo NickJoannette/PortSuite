@@ -1,7 +1,6 @@
-Re-usable class structure and cross-platform application for reading serial ports, parsing, plotting, and saving data. Opens and closes a selected system serial port, reads, parses, and plots incoming data from a sensor or whatever may be transmitted by the peripherals (in the example case a signal from a Hall sensor communicated through an arduino).
+A re-usable class structure and cross-platform application for reading, parsing, plotting, and saving data read from the selected system serial port. 
 
-Allows the user to export the two dimensional data as .xls, .csv, and .json. 
-
+Can export the data as .xls, .csv, or .json. 
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/NickJoannette/PortSuite/master/images/PortSuite_alt_layout.PNG">
