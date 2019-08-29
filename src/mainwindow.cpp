@@ -102,7 +102,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
      QFont font;
      font.setPixelSize(24);
 
-     // Setting and customizing the series plot
+     // Instantiating and customizing the series plot; Setting the pen for drawing it
+
      series = new QtCharts::QSplineSeries();
      QColor darkgreen;
      darkgreen.setRgb(44,205,112);
@@ -110,20 +111,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
      pen.setWidth(2);
 
 
-     // Setting the chart
+     // Instantiating the Chart, Hiding the Legend, Adding the Series
+
     QtCharts::QChart *chart;
     chart = new QtCharts::QChart();
     chart->legend()->hide();
     chart->addSeries(series);
 
-    // Setting the Title
+    // Setting the Chart Title
 
     chart->setTitle("E44 Hall Sensor");
 
     // Customizing the Chart
 
     chart->setBackgroundBrush(QBrush(Qt::white));
-
     chart->createDefaultAxes();
     chart->axes(Qt::Horizontal).first()->setRange(0,200);
     chart->axes(Qt::Vertical).first()->setRange(0, 400);
@@ -145,8 +146,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     chart->setTitleFont(font);
     chart->setDropShadowEnabled();
     chart->setBackgroundRoundness(0);
-
-
 
     // BUTTON Customization
 
@@ -180,10 +179,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
-
     top_box_layout->addWidget(chartView);
 
-    //commsPanelWidget->setMaximumWidth(400);
     comms_panel_layout->addStretch(300);
     //comms_panel_layout->addWidget(comControlWidget);
     comms_panel_layout->addWidget(&comms_log);
@@ -203,6 +200,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
     // MENU CONNECTIONS
+
     connect(file_menu, SIGNAL(triggered(QAction*)), this, SLOT(EXPORT_DATA_CLICKED(QAction*)));
 }
 
@@ -226,6 +224,7 @@ void MainWindow::OPEN_COM4_CLICKED()
                                "background-color: green; color: white; "
                                "}"
                             );
+
     if (!s_com->qsp->isOpen())s_com->qsp->open(QIODevice::ReadOnly);
     if (s_com->qsp->isOpen()) comms_log.setText("Port Status: OPEN\n"
                                                 "Bytes received: " + QString::number(total_bytes_read) +
@@ -313,7 +312,6 @@ void MainWindow::RESET_DATA_CLICKED()
    comms_log.setText( "Port Status: " + status +
                      "Bytes received: " + QString::number(total_bytes_read) +
                      "\nMean value: "  + QString::number(average_data_value) +"\n");
-
 }
 
 
