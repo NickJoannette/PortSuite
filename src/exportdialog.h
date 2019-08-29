@@ -9,10 +9,12 @@
 
 class ExportDialog : public QFileDialog
 {
-public:
+
+    Q_OBJECT
+    public:
     ExportDialog();
 
-private:
+    private:
 
 
 };

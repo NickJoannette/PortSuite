@@ -13,6 +13,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include "exportdialog.h"
+#include "mainwindowmenubar.h"
 
 class MainWindow : public QMainWindow
 {
@@ -37,27 +38,20 @@ private slots:
     void CLEAR_CHART_CLICKED();
     void RESET_DATA_CLICKED();
     void receive_chart_data(unsigned int, unsigned int);
-    void EXPORT_DATA_CLICKED(QAction* action);
+
 
 
 private:
 
     QVBoxLayout * com_button_layout;
-    QVBoxLayout * top_box_layout;
+    QHBoxLayout * top_box_layout;
     QHBoxLayout* comms_panel_layout;
 
     QTextBrowser res;
     bool LED1_IS_ON = false;
 
-    // MENU
-    QMenu* file_menu;
-    QMenu* port_menu;
-    QAction *save_plot_action, *export_data_action;
-    QAction *choose_port_action;
-    QMenu* m_pSubMenu;
 
-    // MENU DIALOGS
-    ExportDialog* data_export_dialog;
+
 
     // UI SECTION LABELS
     // coms
@@ -65,8 +59,6 @@ private:
 
     // charts
     QLabel charts_control_section_label;
-
-
 
     // DATA CHARTING
     QChartView *chartView;

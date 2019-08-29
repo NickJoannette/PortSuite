@@ -4,49 +4,10 @@
 #include <iostream>
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    // MENU BAR SETUP
 
-        // ITEMS
-
-       m_pSubMenu = new QMenu("");
-       QMenuBar* pMenuBar = new QMenuBar(this);
-       setMenuBar(pMenuBar);
-
-       save_plot_action = new QAction("Save Plot",this);
-       export_data_action = new QAction("Export Data",this);
-
-       file_menu = new QMenu("File", this);
-       file_menu->setMinimumHeight(30);
-       file_menu->addAction(save_plot_action);
-       file_menu->addAction(export_data_action);
-
-       choose_port_action = new QAction("Choose port...",this);
-
-       port_menu = new QMenu("Port", this);
-       port_menu->addAction(choose_port_action);
-
-       this->menuBar()->addMenu(file_menu);
-       this->menuBar()->addMenu(port_menu);
-
-       // CUSTOMIZATION/ STYLES
-       setStyleSheet
-       ("QMenuBar::item:selected{background-color:green;}"
-
-        "QMenu{background-color:black; color:white;"
-        "border:1px solid  rgb(44,205,112);}"
-
-        "QMenu::item{spacing: 3px; padding: 10px;}"
-        "QMenu::item:selected{background-color: rgb(44,205,112);}"
-
-        );
-
-       this->menuBar()->setStyleSheet("background-color:black; "
-                                      "border-bottom:1px solid darkgreen; "
-                                      "color:white;"
-                                      );
-
-       this->menuBar()->addSeparator();
-
+    // MENU
+    MainWindowMenuBar* main_menu_bar = new MainWindowMenuBar(this);
+    setMenuBar(main_menu_bar);
 
     // SERIAL COMM
     s_com = new SerialCommunicator(series);
@@ -56,17 +17,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QWidget *topWidget = new QWidget;
     topWidget->setStyleSheet("background-color:#474747;");
     QWidget *comControlWidget = new QWidget;
+    comControlWidget->setWindowFlag(Qt::FramelessWindowHint);
     comControlWidget->show();
     comControlWidget->resize(50,50);
-    top_box_layout = new QVBoxLayout(topWidget);
+    top_box_layout = new QHBoxLayout(topWidget);
     top_box_layout ->setSpacing(5);
     topWidget->setLayout(top_box_layout);
     setCentralWidget(topWidget);
 
-    // SETTING UP THE DIALOGS
 
-    data_export_dialog = new ExportDialog();
-    data_export_dialog->setMaximumHeight(200);
+
     // COMMS Customization
 
     QWidget *commsPanelWidget = new QWidget;
@@ -132,11 +92,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     chart->axes(Qt::Vertical).first()->setTitleText("Relative Voltage Signal");
     chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
-    QSize chartviewsize;
 
-    chartviewsize.setHeight(350);
-    chartviewsize.setWidth(600);
-    chartView->setMinimumSize(chartviewsize);
+    QSize chartviewsize;
+    chartviewsize.setHeight(250);
+    chartviewsize.setWidth(350);
+    chartView->setMaximumSize(chartviewsize);
 
     // POST-THEME CUSTOMIZATIONS
     chartView->chart()->setTheme(QChart::ChartThemeDark);
@@ -180,13 +140,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
     top_box_layout->addWidget(chartView);
-
+    top_box_layout->addWidget(&comms_log);
     comms_panel_layout->addStretch(300);
     //comms_panel_layout->addWidget(comControlWidget);
-    comms_panel_layout->addWidget(&comms_log);
+   // comms_panel_layout->addWidget(&comms_log);
     //comms_panel_layout->setSizeConstraint(QLayout::SetMinimumSize);
     comms_panel_layout->addStretch(300);
-    top_box_layout->addWidget(commsPanelWidget);
+  //  top_box_layout->addWidget(commsPanelWidget);
 
     connect(&OPEN_COM4,SIGNAL(clicked()),s_com,SLOT(Open_COM4()));
     connect(&OPEN_COM4,SIGNAL(clicked()),this,SLOT(OPEN_COM4_CLICKED()));
@@ -199,9 +159,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
 
 
-    // MENU CONNECTIONS
-
-    connect(file_menu, SIGNAL(triggered(QAction*)), this, SLOT(EXPORT_DATA_CLICKED(QAction*)));
 }
 
 
@@ -314,12 +271,4 @@ void MainWindow::RESET_DATA_CLICKED()
                      "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
 
-
-// MENU SLOTS
-
-void MainWindow::EXPORT_DATA_CLICKED(QAction* action)
-{
-    qDebug () << "Triggered: " << action->text();
-    data_export_dialog->show();
-}
 

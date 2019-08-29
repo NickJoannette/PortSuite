@@ -35,11 +35,13 @@ SOURCES += \
         exportdialog.cpp \
         main.cpp \
         mainwindow.cpp \
+        mainwindowmenubar.cpp \
         serialcommunicator.cpp
 
 HEADERS += \
         exportdialog.h \
         mainwindow.h \
+        mainwindowmenubar.h \
         serialcommunicator.h
 
 FORMS += \
