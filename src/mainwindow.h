@@ -12,6 +12,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QMenuBar>
+#include "exportdialog.h"
 
 class MainWindow : public QMainWindow
 {
@@ -56,7 +57,7 @@ private:
     QMenu* m_pSubMenu;
 
     // MENU DIALOGS
-    QFileDialog* data_export_dialog;
+    ExportDialog* data_export_dialog;
 
     // UI SECTION LABELS
     // coms

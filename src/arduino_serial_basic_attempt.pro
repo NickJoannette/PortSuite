@@ -32,11 +32,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        exportdialog.cpp \
         main.cpp \
         mainwindow.cpp \
         serialcommunicator.cpp
 
 HEADERS += \
+        exportdialog.h \
         mainwindow.h \
         serialcommunicator.h
 

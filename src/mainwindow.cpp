@@ -62,11 +62,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
     // SETTING UP THE DIALOGS
-       data_export_dialog = new QFileDialog(0,Qt::WindowStaysOnTopHint);
-       data_export_dialog->setLabelText(QFileDialog::Accept, tr("Save"));
-        data_export_dialog->setNameFilter(tr("Excel file (.xls .xlsx);;CSV file (.csv);;JSON file (.json)"));
-        data_export_dialog->setViewMode(QFileDialog::List);
-        data_export_dialog->setWindowTitle("Export data as...");
+    data_export_dialog = new ExportDialog();
+
     // COMMS Customization
 
     QWidget *commsPanelWidget = new QWidget;
