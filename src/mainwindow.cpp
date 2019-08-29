@@ -95,7 +95,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QPoint mw = pos();
     int x = mw.x();
     int y =mw.y();
-    pcbw->move(x-105,y-pcbw->height()+height()/2);
+    pcbw->move(x-100,y-pcbw->height()+height()/2);
     top_box_layout->addWidget(chartView);
     top_box_layout->addWidget(&comms_log);
 
@@ -165,7 +165,13 @@ void MainWindow::write_Reset()
 
 void MainWindow::moveEvent(QMoveEvent* event)
 {
-
-    pcbw->move(event->pos().x()-105,event->pos().y()-pcbw->height()+height()/2);
+    pcbw->raise();
+    pcbw->move(event->pos().x()-100,event->pos().y()-pcbw->height()+height()/2);
 
 }
+
+ void MainWindow::closeEvent(QCloseEvent* event)
+ {
+
+     pcbw->close();
+ }

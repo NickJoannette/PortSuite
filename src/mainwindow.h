@@ -46,6 +46,7 @@ private slots:
 
 private:
     void moveEvent(QMoveEvent * event);
+    void closeEvent(QCloseEvent* event);
 
     QHBoxLayout * top_box_layout;
     QHBoxLayout* comms_panel_layout;

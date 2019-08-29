@@ -22,7 +22,7 @@ public:
                                                                                   title.setText("Port Control");
                                                                                   setWindowFlag(Qt::FramelessWindowHint);
                                                                                   setStyleSheet("background-color:#474747;");
-                                                                                  setFixedWidth(95);
+                                                                                  setFixedWidth(100);
                                                                                   setFixedHeight(160);
                                                                                   com_button_layout = new QVBoxLayout(this);
 
@@ -38,6 +38,7 @@ public:
                                                                                   RESET_DATA_BUTTON.setFixedSize(80,35);
 
                                                                                   show();
+
                                                                                   // BUTTON Customization
 
                                                                                   OPEN_COM4.setText("Open Port");
