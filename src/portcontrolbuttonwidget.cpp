@@ -1,71 +1,5 @@
 #include "portcontrolbuttonwidget.h"
 
-PortControlButtonWidget::PortControlButtonWidget(SerialCommunicator* p)
-{
-    parent = p;
-
-    QWidget *comControlWidget = new QWidget;
-   // comControlWidget->setWindowFlag(Qt::FramelessWindowHint);
-    comControlWidget->show();
-    comControlWidget->resize(50,50);
-
-
-    com_button_layout = new QVBoxLayout(comControlWidget);
-    com_button_layout->setSpacing(0);
-    com_button_layout->addWidget(&OPEN_COM4);
-    com_button_layout->addWidget(&FLICKER_LED);
-    com_button_layout->addWidget(&READ_BUTTON);
-    com_button_layout->addWidget(&RESET_DATA_BUTTON);
-    com_button_layout->setSpacing(5);
-
-    OPEN_COM4.setFixedSize(80,35);
-    FLICKER_LED.setFixedSize(80,35);
-    READ_BUTTON.setFixedSize(80,35);
-    RESET_DATA_BUTTON.setFixedSize(80,35);
-
-
-    // BUTTON Customization
-
-    OPEN_COM4.setText("Open Port");
-    FLICKER_LED.setText("Close Port");
-    OPEN_COM4.setStyleSheet(
-                         "QPushButton:hover{background-color: green; } "
-                         "QPushButton{padding: 3px; "
-                         "background-color: black; color: white; "
-                         "}"
-                            );
-
-    FLICKER_LED.setStyleSheet( "QPushButton:hover{background-color: green; } "
-                               "QPushButton{padding: 3px; "
-                               "background-color: black; color: white; "
-                               " }"
-                                 );
-
-    READ_BUTTON.setText("Clear Graph");
-    READ_BUTTON.setStyleSheet( "QPushButton:hover{background-color: green; } "
-                               "QPushButton{padding: 3px; "
-                               "background-color: black; color: white; "
-                               " }"
-                                 );
-
-    RESET_DATA_BUTTON.setText("RESET DATA");
-    RESET_DATA_BUTTON.setStyleSheet("QPushButton:hover{background-color: firebrick; } "
-                                    "QPushButton{padding: 3px; "
-                                    "background-color: maroon; color: white; "
-                                    " }");
-
-    // CONNECTIONS
-
-    connect(&OPEN_COM4,SIGNAL(clicked()),parent,SLOT(Open_COM4()));
-    connect(&OPEN_COM4,SIGNAL(clicked()),this,SLOT(OPEN_COM4_CLICKED()));
-
-    connect(&FLICKER_LED,SIGNAL(clicked()),parent,SLOT(Close_COM4()));
-    connect(&FLICKER_LED,SIGNAL(clicked()),this,SLOT(CLOSE_COM4_CLICKED()));
-
-    connect(&READ_BUTTON,SIGNAL(clicked()),this,SLOT(CLEAR_CHART_CLICKED()));
-    connect(&RESET_DATA_BUTTON,SIGNAL(clicked()),this,SLOT(RESET_DATA_CLICKED()));
-
-}
 
 void PortControlButtonWidget::OPEN_COM4_CLICKED()
 {
@@ -76,7 +10,7 @@ void PortControlButtonWidget::OPEN_COM4_CLICKED()
                                "}"
                             );
 
-    if (!parent->qsp->isOpen())parent->qsp->open(QIODevice::ReadOnly);
+    if (!serial_parent->qsp->isOpen())serial_parent->qsp->open(QIODevice::ReadOnly);
 
     /*
     if (s_com->qsp->isOpen() && s_com->qsp->isWritable())
@@ -104,8 +38,8 @@ void PortControlButtonWidget::OPEN_COM4_CLICKED()
 void PortControlButtonWidget::CLOSE_COM4_CLICKED()
 {
 
-     if (parent->qsp->isOpen())parent->qsp->close();
-     if (!parent->qsp->isOpen())
+     if (serial_parent->qsp->isOpen())serial_parent->qsp->close();
+     if (!serial_parent->qsp->isOpen())
      {
          OPEN_COM4.setStyleSheet("QPushButton:hover{background-color: green; } "
           "QPushButton{padding: 3px; "
@@ -138,7 +72,7 @@ void PortControlButtonWidget::CLOSE_COM4_CLICKED()
 
 void PortControlButtonWidget::CLEAR_CHART_CLICKED()
 {
-    parent->bytes_read = 0;
+    serial_parent->bytes_read = 0;
     emit CLEAR_CLICKED();
 }
 

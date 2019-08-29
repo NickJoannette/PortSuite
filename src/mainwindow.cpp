@@ -6,59 +6,48 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
+
     // MENU
     MainWindowMenuBar* main_menu_bar = new MainWindowMenuBar(this);
     setMenuBar(main_menu_bar);
 
     // SERIAL COMM
     s_com = new SerialCommunicator(series);
-    PortControlButtonWidget * pcbw = new PortControlButtonWidget(s_com);
-
+    PortControlButtonWidget * pcbw = new PortControlButtonWidget(s_com,this);
 
     // STYLE AND MAIN LAYOUT
 
     QWidget *topWidget = new QWidget;
-    topWidget->setStyleSheet("background-color:#474747;");
-
-
+    topWidget->setStyleSheet("background-color:black;");
     top_box_layout = new QHBoxLayout(topWidget);
     top_box_layout ->setSpacing(5);
     topWidget->setLayout(top_box_layout);
+    topWidget->setMaximumHeight(450);
     setCentralWidget(topWidget);
 
 
 
     // COMMS Customization
 
-
     comms_panel_layout = new QHBoxLayout();
-
-    // Setting comms log and other static memory member widgets' properties
-
+    comms_log.setFixedSize(150,90);
     comms_log.setStyleSheet("padding:5px; font-size: 12px; color: white; background-color: black; border:1px solid  rgb(44,205,112);");
     QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
     comms_log.setText("Port Status: " + status +
                       "Bytes received: " + QString::number(total_bytes_read) +
                       "\nMean value: "  + QString::number(average_data_value) +"\n");
 
-    comms_log.setFixedSize(250,125);
-
-
     // CHART VIEW
 
+     series = new QtCharts::QSplineSeries();
      QFont font;
      font.setPixelSize(24);
-
-     // Instantiating and customizing the series plot; Setting the pen for drawing it
-
-     series = new QtCharts::QSplineSeries();
      QColor darkgreen;
      darkgreen.setRgb(44,205,112);
      QPen pen(darkgreen);
      pen.setWidth(2);
 
-
-     // Instantiating the Chart, Hiding the Legend, Adding the Series
+    // Instantiating the Chart, Hiding the Legend, Adding the Series
 
     QtCharts::QChart *chart;
     chart = new QtCharts::QChart();
@@ -81,13 +70,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     chartView->setRenderHint(QPainter::Antialiasing);
 
     QSize chartviewsize;
-    chartviewsize.setHeight(250);
-    chartviewsize.setWidth(350);
-    chartView->setMaximumSize(chartviewsize);
+    chartviewsize.setHeight(325);
+    chartviewsize.setWidth(550);
+    chartView->setMinimumSize(chartviewsize);
 
     // POST-THEME CUSTOMIZATIONS
     chartView->chart()->setTheme(QChart::ChartThemeDark);
-     chartView->setStyleSheet("background-color: black;");
+    chartView->setStyleSheet("background-color: black;");
     series->setPen(pen);
     chart->setTitleBrush(QBrush(Qt::white));
     chart->setTitleFont(font);
@@ -97,19 +86,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
+    addDockWidget(Qt::LeftDockWidgetArea, pcbw);
+
+    //pcbw->setFloating(true);
     top_box_layout->addWidget(chartView);
     top_box_layout->addWidget(&comms_log);
+
+    // CONNECTING SIGNALS AND SLOTS
 
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
     connect(pcbw, SIGNAL(CLOSE_CLICKED()),this, SLOT(write_Closed()));
     connect(pcbw, SIGNAL(CLEAR_CLICKED()),this, SLOT(write_Cleared()));
     connect(pcbw, SIGNAL(RESET_CLICKED()),this, SLOT(write_Reset()));
+
 }
 
 
 void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
 {
-    qDebug() << "Received: " << br << ", " << d << "\n";
+   // qDebug() << "Received: " << br << ", " << d << "\n";
     total_bytes_read+=1;
     series->append(br, d);
     data_value_sum+=d;

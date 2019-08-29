@@ -36,7 +36,7 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
 
         "QMenu::item{spacing: 3px; padding: 10px;}"
         "QMenu::item:selected{background-color: rgb(44,205,112);}"
-
+        "QMainWindow::separator{background: blue;}"
         );
 
 

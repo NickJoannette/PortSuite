@@ -26,7 +26,7 @@ void SerialCommunicator::SERIAL_INTERACT()
            p = stoi(s);
            if (p>100){
            ++bytes_read;
-           qDebug() << "Sent: " << bytes_read << ", " << p << "\n";
+          // qDebug() << "Sent: " << bytes_read << ", " << p << "\n";
            emit(send_chart_data(bytes_read, p));
 
        }
