@@ -55,6 +55,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QWidget *topWidget = new QWidget;
     topWidget->setStyleSheet("background-color:#474747;");
     QWidget *comControlWidget = new QWidget;
+    comControlWidget->show();
+    comControlWidget->resize(50,50);
     top_box_layout = new QVBoxLayout(topWidget);
     top_box_layout ->setSpacing(5);
     topWidget->setLayout(top_box_layout);
@@ -63,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // SETTING UP THE DIALOGS
     data_export_dialog = new ExportDialog();
-
+    data_export_dialog->setMaximumHeight(200);
     // COMMS Customization
 
     QWidget *commsPanelWidget = new QWidget;
@@ -182,8 +184,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     top_box_layout->addWidget(chartView);
 
     //commsPanelWidget->setMaximumWidth(400);
-        comms_panel_layout->addStretch(300);
-    comms_panel_layout->addWidget(comControlWidget); comms_panel_layout->addWidget(&comms_log);
+    comms_panel_layout->addStretch(300);
+    //comms_panel_layout->addWidget(comControlWidget);
+    comms_panel_layout->addWidget(&comms_log);
     //comms_panel_layout->setSizeConstraint(QLayout::SetMinimumSize);
     comms_panel_layout->addStretch(300);
     top_box_layout->addWidget(commsPanelWidget);
