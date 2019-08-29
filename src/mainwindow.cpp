@@ -6,7 +6,6 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
-
     // MENU
     MainWindowMenuBar* main_menu_bar = new MainWindowMenuBar(this);
     setMenuBar(main_menu_bar);
@@ -33,7 +32,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     comms_log.setFixedSize(150,90);
     comms_log.setStyleSheet("padding:5px; font-size: 12px; color: white; background-color: black; border:1px solid  rgb(44,205,112);");
     QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
-    comms_log.setText("Port Status: " + status +
+    comms_log.setText("Port:\n"
+                      "Status: " + status +
                       "Bytes received: " + QString::number(total_bytes_read) +
                       "\nMean value: "  + QString::number(average_data_value) +"\n");
 
@@ -86,9 +86,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
-    addDockWidget(Qt::LeftDockWidgetArea, pcbw);
+    addDockWidget(Qt::RightDockWidgetArea, pcbw);
 
-    //pcbw->setFloating(true);
+
+    pcbw->setFloating(true);
+    QPoint mw = pos();
+    int x = mw.x();
+    int y =mw.y();
+    pcbw->move(x-95,y-pcbw->height()+height()/2);
     top_box_layout->addWidget(chartView);
     top_box_layout->addWidget(&comms_log);
 
@@ -109,7 +114,8 @@ void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
     series->append(br, d);
     data_value_sum+=d;
     average_data_value = data_value_sum/total_bytes_read;
-    comms_log.setText("Port Status: OPEN\n"
+    comms_log.setText("Port: COM4\n"
+                "Status: OPEN\n"
     "Bytes received: " + QString::number(total_bytes_read) +
     "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
@@ -117,7 +123,8 @@ void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
 
 void MainWindow::write_Opened()
 {
-    if (s_com->qsp->isOpen()) comms_log.setText("Port Status: OPEN\n"
+    if (s_com->qsp->isOpen()) comms_log.setText("Port: COM4\n"
+                                                "Status: OPEN\n"
                                                 "Bytes received: " + QString::number(total_bytes_read) +
                                                 "\nMean value: "  + QString::number(average_data_value) +"\n");
 
@@ -125,7 +132,8 @@ void MainWindow::write_Opened()
 
 void MainWindow::write_Closed()
 {
-    comms_log.setText("Port Status: CLOSED\n"
+    comms_log.setText("Port: COM4\n"
+                      "Status: CLOSED\n"
                       "Bytes received: " + QString::number(total_bytes_read) +
                       "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
@@ -134,7 +142,8 @@ void MainWindow::write_Cleared()
 {
     series->clear();
     QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
-    comms_log.setText( "Port Status: " + status +
+    comms_log.setText("Port: COM4\n"
+                      "Status: " + status +
                       "Bytes received: " + QString::number(total_bytes_read) +
                       "\nMean value: "  + QString::number(average_data_value) +"\n");
 }

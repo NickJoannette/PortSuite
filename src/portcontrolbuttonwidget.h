@@ -15,19 +15,18 @@ class PortControlButtonWidget : public QDockWidget
 public:
     PortControlButtonWidget(SerialCommunicator* serial_parent, QMainWindow* parent) : QDockWidget(parent), serial_parent(serial_parent){
 
-
                                                                                   QWidget *comControlWidget = new QWidget;
-
                                                                                   setWidget(comControlWidget);
-                                                                                  setStyleSheet("background-color:black;");
-                                                                                  setAttribute(Qt::WA_TranslucentBackground, false);
-                                                                                  setAttribute(Qt::WA_NoSystemBackground, false);
-                                                                                  comControlWidget->show();
+                                                                                  setStyleSheet("background: darkgreen;separator{background:darkgreen;}");
+                                                                                  QLabel title;
+                                                                                  title.setText("Port Control");
+                                                                                  setTitleBarWidget(&title);
+
                                                                                   comControlWidget->setStyleSheet("background-color:#474747;");
                                                                                   comControlWidget->setFixedWidth(95);
                                                                                   comControlWidget->setFixedHeight(160);
                                                                                   com_button_layout = new QVBoxLayout(comControlWidget);
-                                                                                  com_button_layout->setSpacing(0);
+
                                                                                   com_button_layout->addWidget(&OPEN_COM4);
                                                                                   com_button_layout->addWidget(&FLICKER_LED);
                                                                                   com_button_layout->addWidget(&READ_BUTTON);
@@ -93,10 +92,6 @@ private slots:
     void RESET_DATA_CLICKED();
 
 private:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    int m_nMouseClick_X_Coordinate;
-    int m_nMouseClick_Y_Coordinate;
 
     SerialCommunicator* serial_parent;
     QMainWindow* parent;
