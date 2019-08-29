@@ -1,6 +1,8 @@
-A re-usable class structure and cross-platform application for reading, parsing, plotting, and saving the data read from a selected system serial port. 
+### About
 
-Can export the numerical data as .xls, .csv, or .json. Currently configured to read hall sensor data from an arduino. Meant to be combined into a larger serial control station application.
+This cross-platform application built with C++ and programmatic Qt offers a class structure for reading, parsing, plotting, analyzing and saving the data read from a selected system serial port. Options are available to export the sorted data in .json, .xls/.xlsx, or .csv format, as well as save an image of the plot.
+
+The purpose of this 'super-widget' is use it as a building block for a larger serial/port communications control station software for remote communication with bluetooth and wifi modules in a useful context.
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/NickJoannette/PortSuite/master/images/PortSuite_alt_layout.png">
