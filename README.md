@@ -3,5 +3,5 @@ A re-usable class structure and cross-platform application for reading, parsing,
 Can export the data as .xls, .csv, or .json. 
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/NickJoannette/PortSuite/master/images/PortSuite_alt_layout.PNG">
+<img src="https://raw.githubusercontent.com/NickJoannette/PortSuite/master/images/PortSuite_alt_layout.png">
   </p>
