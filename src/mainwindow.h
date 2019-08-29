@@ -45,7 +45,7 @@ private slots:
 
 
 private:
-
+    void moveEvent(QMoveEvent * event);
 
     QHBoxLayout * top_box_layout;
     QHBoxLayout* comms_panel_layout;
@@ -70,7 +70,7 @@ private:
     QtCharts::QAreaSeries* evaluation_points;
 
     // SERIAL INTERACTION
-
+    PortControlButtonWidget * pcbw;
     // Layout Partition Labels
 
     QLabel transmission_label;

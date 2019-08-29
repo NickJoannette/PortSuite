@@ -6,13 +6,15 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
+
+
     // MENU
     MainWindowMenuBar* main_menu_bar = new MainWindowMenuBar(this);
     setMenuBar(main_menu_bar);
 
     // SERIAL COMM
     s_com = new SerialCommunicator(series);
-    PortControlButtonWidget * pcbw = new PortControlButtonWidget(s_com,this);
+    pcbw = new PortControlButtonWidget(s_com,this);
 
     // STYLE AND MAIN LAYOUT
 
@@ -86,14 +88,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
-    addDockWidget(Qt::RightDockWidgetArea, pcbw);
+  //  addDockWidget(Qt::RightDockWidgetArea, pcbw);
 
 
-    pcbw->setFloating(true);
+   // pcbw->setFloating(true);
     QPoint mw = pos();
     int x = mw.x();
     int y =mw.y();
-    pcbw->move(x-95,y-pcbw->height()+height()/2);
+    pcbw->move(x-105,y-pcbw->height()+height()/2);
     top_box_layout->addWidget(chartView);
     top_box_layout->addWidget(&comms_log);
 
@@ -159,4 +161,11 @@ void MainWindow::write_Reset()
                        "Status: " + status +
                        "Bytes received: " + QString::number(total_bytes_read) +
                        "\nMean value: "  + QString::number(average_data_value) +"\n");
+}
+
+void MainWindow::moveEvent(QMoveEvent* event)
+{
+
+    pcbw->move(event->pos().x()-105,event->pos().y()-pcbw->height()+height()/2);
+
 }

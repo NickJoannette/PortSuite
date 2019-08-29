@@ -7,25 +7,24 @@
 
 
 
-class PortControlButtonWidget : public QDockWidget
+class PortControlButtonWidget : public QWidget
 {
     Q_OBJECT
 
 
 public:
-    PortControlButtonWidget(SerialCommunicator* serial_parent, QMainWindow* parent) : QDockWidget(parent), serial_parent(serial_parent){
+    PortControlButtonWidget(SerialCommunicator* serial_parent, QMainWindow* parent) : serial_parent(serial_parent){
 
                                                                                   QWidget *comControlWidget = new QWidget;
-                                                                                  setWidget(comControlWidget);
+
                                                                                   setStyleSheet("background: darkgreen;separator{background:darkgreen;}");
                                                                                   QLabel title;
                                                                                   title.setText("Port Control");
-                                                                                  setTitleBarWidget(&title);
-
-                                                                                  comControlWidget->setStyleSheet("background-color:#474747;");
-                                                                                  comControlWidget->setFixedWidth(95);
-                                                                                  comControlWidget->setFixedHeight(160);
-                                                                                  com_button_layout = new QVBoxLayout(comControlWidget);
+                                                                                  setWindowFlag(Qt::FramelessWindowHint);
+                                                                                  setStyleSheet("background-color:#474747;");
+                                                                                  setFixedWidth(95);
+                                                                                  setFixedHeight(160);
+                                                                                  com_button_layout = new QVBoxLayout(this);
 
                                                                                   com_button_layout->addWidget(&OPEN_COM4);
                                                                                   com_button_layout->addWidget(&FLICKER_LED);
@@ -38,7 +37,7 @@ public:
                                                                                   READ_BUTTON.setFixedSize(80,35);
                                                                                   RESET_DATA_BUTTON.setFixedSize(80,35);
 
-
+                                                                                  show();
                                                                                   // BUTTON Customization
 
                                                                                   OPEN_COM4.setText("Open Port");
