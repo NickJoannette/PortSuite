@@ -14,9 +14,11 @@
 #include <QMenuBar>
 #include "exportdialog.h"
 #include "mainwindowmenubar.h"
+#include "portcontrolbuttonwidget.h"
 
 class MainWindow : public QMainWindow
 {
+    friend class PortControlButtonWidget;
     Q_OBJECT
 
 public:
@@ -33,17 +35,18 @@ public:
 
 private slots:
 
-    void OPEN_COM4_CLICKED();
-    void CLOSE_COM4_CLICKED();
-    void CLEAR_CHART_CLICKED();
-    void RESET_DATA_CLICKED();
+    void write_Opened();
+    void write_Closed();
+    void write_Cleared();
+    void write_Reset();
+
     void receive_chart_data(unsigned int, unsigned int);
 
 
 
 private:
 
-    QVBoxLayout * com_button_layout;
+
     QHBoxLayout * top_box_layout;
     QHBoxLayout* comms_panel_layout;
 
@@ -75,10 +78,7 @@ private:
 
 
     // Buttons and variables
-    QPushButton OPEN_COM4;
-    QPushButton FLICKER_LED;
-    QPushButton READ_BUTTON;
-    QPushButton RESET_DATA_BUTTON;
+
     unsigned int total_bytes_read = 0;
 
     // Serial communicator

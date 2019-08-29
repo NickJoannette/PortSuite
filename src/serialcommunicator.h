@@ -7,10 +7,15 @@
 #include <QtCharts/QSplineSeries>
 #include <QtCharts/QtCharts>
 
+class PortControlButtonWidget;
+
 class SerialCommunicator: public QWidget
 {
     Q_OBJECT
+
+    friend class PortControlButtonWidget;
     friend class MainWindow;
+
 public:
     SerialCommunicator(QtCharts::QSplineSeries *);
 
@@ -26,6 +31,7 @@ private slots:
 protected:
 
     // SERIAL COMMUNICATIONS
+
     QtCharts::QSplineSeries* series;
     QSerialPort * qsp;
     QByteArray serialData;

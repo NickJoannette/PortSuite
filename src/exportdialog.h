@@ -16,7 +16,6 @@ class ExportDialog : public QFileDialog
 
     private:
 
-
 };
 
 #endif // EXPORTDIALOG_H

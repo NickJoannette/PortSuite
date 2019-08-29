@@ -36,12 +36,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         mainwindowmenubar.cpp \
+        portcontrolbuttonwidget.cpp \
         serialcommunicator.cpp
 
 HEADERS += \
         exportdialog.h \
         mainwindow.h \
         mainwindowmenubar.h \
+        portcontrolbuttonwidget.h \
         serialcommunicator.h
 
 FORMS += \

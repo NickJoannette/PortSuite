@@ -2,6 +2,7 @@
 #include <QPushButton>
 #include <QColor>
 #include <iostream>
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
@@ -11,15 +12,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // SERIAL COMM
     s_com = new SerialCommunicator(series);
+    PortControlButtonWidget * pcbw = new PortControlButtonWidget(s_com);
+
 
     // STYLE AND MAIN LAYOUT
 
     QWidget *topWidget = new QWidget;
     topWidget->setStyleSheet("background-color:#474747;");
-    QWidget *comControlWidget = new QWidget;
-    comControlWidget->setWindowFlag(Qt::FramelessWindowHint);
-    comControlWidget->show();
-    comControlWidget->resize(50,50);
+
+
     top_box_layout = new QHBoxLayout(topWidget);
     top_box_layout ->setSpacing(5);
     topWidget->setLayout(top_box_layout);
@@ -42,20 +43,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     comms_log.setFixedSize(250,125);
     comms_panel_layout->setSpacing(0);
-    com_button_layout = new QVBoxLayout(comControlWidget);
-
     transmission_label.setText("Transmission |");
     reception_label.setText("Reception |");
 
-    com_button_layout->setSpacing(0);
-    com_button_layout->addWidget(&OPEN_COM4);
-    com_button_layout->addWidget(&FLICKER_LED);
-    com_button_layout->addWidget(&READ_BUTTON);
-    com_button_layout->addWidget(&RESET_DATA_BUTTON);
-    com_button_layout->setSpacing(5);
 
-    OPEN_COM4.setFixedSize(80,35);FLICKER_LED.setFixedSize(80,35);READ_BUTTON.setFixedSize(80,35);
-    RESET_DATA_BUTTON.setFixedSize(80,35);
 
     // CHART VIEW
 
@@ -107,35 +98,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     chart->setDropShadowEnabled();
     chart->setBackgroundRoundness(0);
 
-    // BUTTON Customization
-
-    OPEN_COM4.setText("Open Port");
-    FLICKER_LED.setText("Close Port");
-    OPEN_COM4.setStyleSheet(
-                         "QPushButton:hover{background-color: green; } "
-                         "QPushButton{padding: 3px; "
-                         "background-color: black; color: white; "
-                         "}"
-                            );
-
-    FLICKER_LED.setStyleSheet( "QPushButton:hover{background-color: green; } "
-                               "QPushButton{padding: 3px; "
-                               "background-color: black; color: white; "
-                               " }"
-                                 );
-
-    READ_BUTTON.setText("Clear Graph");
-    READ_BUTTON.setStyleSheet( "QPushButton:hover{background-color: green; } "
-                               "QPushButton{padding: 3px; "
-                               "background-color: black; color: white; "
-                               " }"
-                                 );
-
-    RESET_DATA_BUTTON.setText("RESET DATA");
-    RESET_DATA_BUTTON.setStyleSheet("QPushButton:hover{background-color: firebrick; } "
-                                    "QPushButton{padding: 3px; "
-                                    "background-color: maroon; color: white; "
-                                    " }");
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
@@ -148,17 +110,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     comms_panel_layout->addStretch(300);
   //  top_box_layout->addWidget(commsPanelWidget);
 
-    connect(&OPEN_COM4,SIGNAL(clicked()),s_com,SLOT(Open_COM4()));
-    connect(&OPEN_COM4,SIGNAL(clicked()),this,SLOT(OPEN_COM4_CLICKED()));
-
-    connect(&FLICKER_LED,SIGNAL(clicked()),s_com,SLOT(Close_COM4()));
-    connect(&FLICKER_LED,SIGNAL(clicked()),this,SLOT(CLOSE_COM4_CLICKED()));
-
-    connect(&READ_BUTTON,SIGNAL(clicked()),this,SLOT(CLEAR_CHART_CLICKED()));
-    connect(&RESET_DATA_BUTTON,SIGNAL(clicked()),this,SLOT(RESET_DATA_CLICKED()));
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
-
-
+    connect(pcbw, SIGNAL(CLOSE_CLICKED()),this, SLOT(write_Closed()));
+    connect(pcbw, SIGNAL(CLEAR_CLICKED()),this, SLOT(write_Cleared()));
+    connect(pcbw, SIGNAL(RESET_CLICKED()),this, SLOT(write_Reset()));
 }
 
 
@@ -173,102 +128,40 @@ void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
     "Bytes received: " + QString::number(total_bytes_read) +
     "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
-void MainWindow::OPEN_COM4_CLICKED()
+
+
+void MainWindow::write_Opened()
 {
-
-    OPEN_COM4.setStyleSheet(
-                               "QPushButton{padding: 3px; "
-                               "background-color: green; color: white; "
-                               "}"
-                            );
-
-    if (!s_com->qsp->isOpen())s_com->qsp->open(QIODevice::ReadOnly);
     if (s_com->qsp->isOpen()) comms_log.setText("Port Status: OPEN\n"
                                                 "Bytes received: " + QString::number(total_bytes_read) +
                                                 "\nMean value: "  + QString::number(average_data_value) +"\n");
 
-    /*
-    if (s_com->qsp->isOpen() && s_com->qsp->isWritable())
-                {
-                    QByteArray * ba;
-                    if (LED1_IS_ON == false)
-                    {
-                        ba = new QByteArray("A");
-                        qDebug() << "Turned on." << endl;
-                        LED1_IS_ON = true;
-                    }
-                    else
-                    {
-                        ba = new QByteArray("B");
-                        LED1_IS_ON = false;
-                    }
-
-                    s_com->qsp->write(*ba);
-                    s_com->qsp->flush();
-                    s_com->qsp->close();
-                }*/
-
 }
 
-void MainWindow::CLOSE_COM4_CLICKED()
+void MainWindow::write_Closed()
 {
-
-     if (s_com->qsp->isOpen())s_com->qsp->close();
-     if (!s_com->qsp->isOpen())
-     {
-         comms_log.setText("Port Status: CLOSED\n"
-                           "Bytes received: " + QString::number(total_bytes_read) +
-                           "\nMean value: "  + QString::number(average_data_value) +"\n");
-
-         OPEN_COM4.setStyleSheet("QPushButton:hover{background-color: green; } "
-          "QPushButton{padding: 3px; "
-          "background-color: black; color: white; "
-          "}");
-     }
-
-     /*  if (s_com->qsp->isOpen() && s_com->qsp->isWritable())
-                {
-                        for (int i = 0; i < 10; ++i)
-                        {
-                           if (!s_com->qsp->isOpen()) s_com->qsp->open(QIODevice::WriteOnly);
-                           s_com->qsp->write(QByteArray("A"));
-                           s_com->qsp->flush();
-
-                           s_com->qsp->close();
-                           QThread::msleep(25);
-                           s_com->qsp->open(QIODevice::WriteOnly);
-                          s_com-> qsp->write(QByteArray("B"));
-                          s_com-> qsp->flush();
-
-                           s_com->qsp->close();
-                           QThread::msleep(25);
-
-                        }
-
-                }*/
-
+    comms_log.setText("Port Status: CLOSED\n"
+                      "Bytes received: " + QString::number(total_bytes_read) +
+                      "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
 
-void MainWindow::CLEAR_CHART_CLICKED()
+void MainWindow::write_Cleared()
 {
-   s_com->bytes_read = 0;
-   series->clear();
-   QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
-   comms_log.setText( "Port Status: " + status +
-                     "Bytes received: " + QString::number(total_bytes_read) +
-                     "\nMean value: "  + QString::number(average_data_value) +"\n");
+    series->clear();
+    QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
+    comms_log.setText( "Port Status: " + status +
+                      "Bytes received: " + QString::number(total_bytes_read) +
+                      "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
 
-void MainWindow::RESET_DATA_CLICKED()
+void MainWindow::write_Reset()
 {
-  // chartView->chart()->setTheme(QChart::ChartThemeDark);
-   total_bytes_read = 0;
-   data_value_sum = 0;
-   average_data_value = 0;
-   QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
-   comms_log.setText( "Port Status: " + status +
-                     "Bytes received: " + QString::number(total_bytes_read) +
-                     "\nMean value: "  + QString::number(average_data_value) +"\n");
+    // chartView->chart()->setTheme(QChart::ChartThemeDark);
+     total_bytes_read = 0;
+     data_value_sum = 0;
+     average_data_value = 0;
+     QString status = s_com->qsp->isOpen() ? "OPEN\n" : "CLOSED\n";
+     comms_log.setText( "Port Status: " + status +
+                       "Bytes received: " + QString::number(total_bytes_read) +
+                       "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
-
-

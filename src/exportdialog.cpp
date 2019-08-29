@@ -8,3 +8,4 @@ ExportDialog::ExportDialog()
     setViewMode(QFileDialog::List);
     setWindowTitle("Export Data");
 }
+

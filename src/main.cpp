@@ -12,9 +12,7 @@ int main(int argc, char *argv[])
     w.setWindowTitle("Arduino to Qt Serial Interface");
     w.resize(800,800);
     w.show();
-    MainWindow x;
-    x.resize(500,500);
-    x.show();
+
 
     w.setGeometry(
                       QStyle::alignedRect(

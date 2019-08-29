@@ -55,7 +55,7 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
 
        // MENU CONNECTIONS
 
-       QObject::connect(file_menu, SIGNAL(triggered(QAction*)), parent, SLOT(EXPORT_DATA_CLICKED(QAction*)));
+       QObject::connect(file_menu, SIGNAL(triggered(QAction*)), this, SLOT(EXPORT_DATA_CLICKED(QAction*)));
 
 
 }
