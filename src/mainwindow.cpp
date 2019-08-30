@@ -41,6 +41,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // CHART VIEW
 
+    // TEST
+
+
+    series0 = new QScatterSeries();
+    series0->setName("scatter1");
+    series0->setMarkerShape(QScatterSeries::MarkerShapeCircle);
+    series0->setMarkerSize(15.0);
+
+    QScatterSeries *series1 = new QScatterSeries();
+    series1->setName("scatter2");
+    series1->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
+    series1->setMarkerSize(20.0);
+
+    QScatterSeries *series2 = new QScatterSeries();
+    series2->setName("scatter3");
+    series2->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
+    series2->setMarkerSize(30.0);
+
+    //////////////
+
      series = new QtCharts::QSplineSeries();
      QFont font;
      font.setPixelSize(24);
@@ -55,10 +75,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     chart = new QtCharts::QChart();
     chart->legend()->hide();
     chart->addSeries(series);
+    chart->addSeries(series0);
 
     // Setting the Chart Title
 
-    chart->setTitle("E44 Hall Sensor");
+    chart->setTitle("Galvanic Response");
 
     // Customizing the Chart
 
@@ -110,6 +131,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     }
 
     p.save("a.png", "PNG");
+    main_windows = this;
     // CONNECTING SIGNALS AND SLOTS
 
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
@@ -125,6 +147,7 @@ void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
    // qDebug() << "Received: " << br << ", " << d << "\n";
     total_bytes_read+=1;
     series->append(br, d);
+    series0->append(d,br);
     data_value_sum+=d;
     average_data_value = data_value_sum/total_bytes_read;
     comms_log.setText("Port: COM4\n"

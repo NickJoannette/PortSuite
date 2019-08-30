@@ -1,6 +1,6 @@
 #include "mainwindowmenubar.h"
 
-MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
+MainWindowMenuBar::MainWindowMenuBar(MainWindow* parent)
 {
     // MENU BAR SETUP
 
@@ -8,12 +8,13 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
 
        SubMenu_1 = new QMenu("");
       // MenuBar = new QMenuBar(parent);
-
+       new_window_action = new QAction("Extra Window");
        save_plot_action = new QAction("Save Plot",parent);
        export_data_action = new QAction("Export Data",parent);
 
        file_menu = new QMenu("File", parent);
        file_menu->setMinimumHeight(30);
+       file_menu->addAction(new_window_action);
        file_menu->addAction(save_plot_action);
        file_menu->addAction(export_data_action);
 
@@ -58,6 +59,23 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
 void MainWindowMenuBar::EXPORT_DATA_CLICKED(QAction* action)
 {
     qDebug () << "Triggered: " << action->text();
-    data_export_dialog->show();
+
+    if (action->text() == "Export Data")
+            data_export_dialog->show();
+    else if (action->text() == "Save Plot")
+    {
+
+    }
+
+    else if (action->text() == "Extra Window")
+    {
+        main_windows = new MainWindow(this);
+        main_windows->setWindowTitle("Heart Response");
+        main_windows->chartView->chart()->setTitle("Penis Response");
+        main_windows->show();
+
+    }
+
+
 }
 
