@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // Setting the Chart Title
 
-    chart->setTitle("Galvanic Response");
+    chart->setTitle("Signal");
 
     // Customizing the Chart
 
