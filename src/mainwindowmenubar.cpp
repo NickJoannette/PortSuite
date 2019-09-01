@@ -17,13 +17,13 @@ MainWindowMenuBar::MainWindowMenuBar(MainWindow* parent)
        file_menu->addAction(new_window_action);
        file_menu->addAction(save_plot_action);
        file_menu->addAction(export_data_action);
-       save_file_dialog = new ExportDialog();
-       save_file_dialog->show();
+
        choose_port_action = new QAction("Choose port...",parent);
 
        port_menu = new QMenu("Port", parent);
        port_menu->addAction(choose_port_action);
-
+       data_export_dialog = new ExportDialog();
+       data_export_dialog->setMaximumHeight(200);
        addMenu(file_menu);
        addMenu(port_menu);
 
@@ -42,6 +42,7 @@ MainWindowMenuBar::MainWindowMenuBar(MainWindow* parent)
         );
 
 
+        ExportDialog* save_file_dialog = new ExportDialog();
 
 
        // MENU CONNECTIONS
@@ -59,25 +60,18 @@ void MainWindowMenuBar::EXPORT_DATA_CLICKED(QAction* action)
 
     if (action->text() == "Export Data")
     {
-        data_export_dialog = new ExportDialog();
-        data_export_dialog->setMaximumHeight(200);
+
         data_export_dialog->show();
     }
 
     else if (action->text() == "Save Plot")
     {
+        QPixmap p;
 
-        QPixmap p = parent
-        QOpenGLWidget *glWidget  = parent->chartView->findChild<QOpenGLWidget*>();
-        if(glWidget){
-            QPainter painter(&p);
-            QPoint d = glWidget->mapToGlobal(QPoint())-parent->chartView->mapToGlobal(QPoint());
-            painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
-            painter.drawImage(d, glWidget->grabFramebuffer());
-            painter.end();
-        }
+
+           save_file_dialog->show();
         QString s = save_file_dialog->getSaveFileName();
-        p.save(s, "PNG");
+        p.save("a.png", "PNG");
     }
 
     else if (action->text() == "Extra Window")
