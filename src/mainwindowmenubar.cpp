@@ -67,8 +67,15 @@ void MainWindowMenuBar::EXPORT_DATA_CLICKED(QAction* action)
     else if (action->text() == "Save Plot")
     {
         QPixmap p;
+        QOpenGLWidget *glWidget  = parent->chartView->findChild<QOpenGLWidget*>();
 
-
+        if(glWidget){
+            QPainter painter(&p);
+            QPoint d = glWidget->mapToGlobal(QPoint())-parent->chartView->mapToGlobal(QPoint());
+            painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+            painter.drawImage(d, glWidget->grabFramebuffer());
+            painter.end();
+        }
            save_file_dialog->show();
         QString s = save_file_dialog->getSaveFileName();
         p.save("a.png", "PNG");
