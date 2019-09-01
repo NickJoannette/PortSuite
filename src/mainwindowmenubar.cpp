@@ -1,6 +1,6 @@
 #include "mainwindowmenubar.h"
 
-MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
+MainWindowMenuBar::MainWindowMenuBar(MainWindow* parent)
 {
     // MENU BAR SETUP
 
@@ -8,15 +8,17 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
 
        SubMenu_1 = new QMenu("");
       // MenuBar = new QMenuBar(parent);
-
+       new_window_action = new QAction("Extra Window");
        save_plot_action = new QAction("Save Plot",parent);
        export_data_action = new QAction("Export Data",parent);
 
        file_menu = new QMenu("File", parent);
        file_menu->setMinimumHeight(30);
+       file_menu->addAction(new_window_action);
        file_menu->addAction(save_plot_action);
        file_menu->addAction(export_data_action);
-
+       save_file_dialog = new ExportDialog();
+       save_file_dialog->show();
        choose_port_action = new QAction("Choose port...",parent);
 
        port_menu = new QMenu("Port", parent);
@@ -40,10 +42,6 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
         );
 
 
-       // SETTING UP THE DIALOGS
-
-       data_export_dialog = new ExportDialog();
-       data_export_dialog->setMaximumHeight(200);
 
 
        // MENU CONNECTIONS
@@ -58,6 +56,38 @@ MainWindowMenuBar::MainWindowMenuBar(QMainWindow* parent)
 void MainWindowMenuBar::EXPORT_DATA_CLICKED(QAction* action)
 {
     qDebug () << "Triggered: " << action->text();
-    data_export_dialog->show();
+
+    if (action->text() == "Export Data")
+    {
+        data_export_dialog = new ExportDialog();
+        data_export_dialog->setMaximumHeight(200);
+        data_export_dialog->show();
+    }
+
+    else if (action->text() == "Save Plot")
+    {
+
+        QPixmap p = parent
+        QOpenGLWidget *glWidget  = parent->chartView->findChild<QOpenGLWidget*>();
+        if(glWidget){
+            QPainter painter(&p);
+            QPoint d = glWidget->mapToGlobal(QPoint())-parent->chartView->mapToGlobal(QPoint());
+            painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+            painter.drawImage(d, glWidget->grabFramebuffer());
+            painter.end();
+        }
+        QString s = save_file_dialog->getSaveFileName();
+        p.save(s, "PNG");
+    }
+
+    else if (action->text() == "Extra Window")
+    {
+        main_windows = new MainWindow(this);
+        main_windows->setWindowTitle("Heart Response");
+        main_windows->chartView->chart()->setTitle("Signal");
+        main_windows->show();
+    }
+
+
 }
 

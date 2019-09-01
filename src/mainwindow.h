@@ -19,6 +19,7 @@
 class MainWindow : public QMainWindow
 {
     friend class PortControlButtonWidget;
+    friend class MainWindowMenuBar;
     Q_OBJECT
 
 public:
@@ -45,11 +46,12 @@ private slots:
 
 
 private:
-
-
+    void moveEvent(QMoveEvent * event);
+    void closeEvent(QCloseEvent* event);
+    MainWindowMenuBar* main_menu_bar ;
     QHBoxLayout * top_box_layout;
     QHBoxLayout* comms_panel_layout;
-
+    MainWindow * main_windows;
     QTextBrowser res;
     bool LED1_IS_ON = false;
 
@@ -67,10 +69,11 @@ private:
     QChartView *chartView;
     QtCharts::QChart *chart;
     QtCharts::QSplineSeries* series;
+    QScatterSeries *series0;
     QtCharts::QAreaSeries* evaluation_points;
 
     // SERIAL INTERACTION
-
+    PortControlButtonWidget * pcbw;
     // Layout Partition Labels
 
     QLabel transmission_label;

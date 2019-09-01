@@ -6,13 +6,15 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
+
+
     // MENU
-    MainWindowMenuBar* main_menu_bar = new MainWindowMenuBar(this);
+    main_menu_bar = new MainWindowMenuBar(this);
     setMenuBar(main_menu_bar);
 
     // SERIAL COMM
     s_com = new SerialCommunicator(series);
-    PortControlButtonWidget * pcbw = new PortControlButtonWidget(s_com,this);
+    pcbw = new PortControlButtonWidget(s_com,this);
 
     // STYLE AND MAIN LAYOUT
 
@@ -23,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     topWidget->setLayout(top_box_layout);
     topWidget->setMaximumHeight(450);
     setCentralWidget(topWidget);
-
 
 
     // COMMS Customization
@@ -39,6 +40,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // CHART VIEW
 
+    // TEST
+
+
+    series0 = new QScatterSeries();
+    series0->setName("scatter1");
+    series0->setMarkerShape(QScatterSeries::MarkerShapeCircle);
+    series0->setMarkerSize(15.0);
+
+    QScatterSeries *series1 = new QScatterSeries();
+    series1->setName("scatter2");
+    series1->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
+    series1->setMarkerSize(20.0);
+
+    QScatterSeries *series2 = new QScatterSeries();
+    series2->setName("scatter3");
+    series2->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
+    series2->setMarkerSize(30.0);
+
+    //////////////
+
      series = new QtCharts::QSplineSeries();
      QFont font;
      font.setPixelSize(24);
@@ -53,10 +74,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     chart = new QtCharts::QChart();
     chart->legend()->hide();
     chart->addSeries(series);
+    chart->addSeries(series0);
 
     // Setting the Chart Title
 
-    chart->setTitle("E44 Hall Sensor");
+    chart->setTitle("Signal");
 
     // Customizing the Chart
 
@@ -82,21 +104,23 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     chart->setTitleFont(font);
     chart->setDropShadowEnabled();
     chart->setBackgroundRoundness(0);
-
+    //setWindowFlag(Qt::FramelessWindowHint);
 
     // ADDING WIDGETS AND LAYOUTS TO MAIN LAYOUT
 
-    addDockWidget(Qt::RightDockWidgetArea, pcbw);
+  //  addDockWidget(Qt::RightDockWidgetArea, pcbw);
 
 
-    pcbw->setFloating(true);
+
+   // pcbw->setFloating(true);
     QPoint mw = pos();
     int x = mw.x();
     int y =mw.y();
-    pcbw->move(x-95,y-pcbw->height()+height()/2);
+    pcbw->move(x-100,y-pcbw->height()+height()/2);
     top_box_layout->addWidget(chartView);
     top_box_layout->addWidget(&comms_log);
 
+    main_windows = this;
     // CONNECTING SIGNALS AND SLOTS
 
     connect(s_com,SIGNAL(send_chart_data(unsigned int, unsigned int)),this,SLOT(receive_chart_data(unsigned int, unsigned int)));
@@ -112,6 +136,7 @@ void MainWindow::receive_chart_data(unsigned int br, unsigned int d)
    // qDebug() << "Received: " << br << ", " << d << "\n";
     total_bytes_read+=1;
     series->append(br, d);
+    series0->append(d,br);
     data_value_sum+=d;
     average_data_value = data_value_sum/total_bytes_read;
     comms_log.setText("Port: COM4\n"
@@ -160,3 +185,15 @@ void MainWindow::write_Reset()
                        "Bytes received: " + QString::number(total_bytes_read) +
                        "\nMean value: "  + QString::number(average_data_value) +"\n");
 }
+
+void MainWindow::moveEvent(QMoveEvent* event)
+{
+    pcbw->raise();
+    pcbw->move(event->pos().x()-100,event->pos().y()-pcbw->height()+height()/2);
+
+}
+
+ void MainWindow::closeEvent(QCloseEvent* event)
+ {
+     pcbw->close();
+ }
