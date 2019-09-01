@@ -54,13 +54,24 @@ MainWindowMenuBar::MainWindowMenuBar(MainWindow* parent)
 
 // MENU SLOTS
 
+#include <ctime>
+#include <chrono>
+
+  std::string timeWithCTimeS()
+  {
+    char buffer[26];
+        rsize_t buffersize = 26;
+        std::time_t current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        ctime_s(buffer, buffersize, &current_time);
+    return buffer;
+ }
 void MainWindowMenuBar::EXPORT_DATA_CLICKED(QAction* action)
 {
     qDebug () << "Triggered: " << action->text();
 
     if (action->text() == "Export Data")
     {
-
+        qDebug() << QString::fromStdString(timeWithCTimeS());
         data_export_dialog->show();
     }
 
