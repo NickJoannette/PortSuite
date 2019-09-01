@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
     // MENU
-    MainWindowMenuBar* main_menu_bar = new MainWindowMenuBar(this);
+    main_menu_bar = new MainWindowMenuBar(this);
     setMenuBar(main_menu_bar);
 
     // SERIAL COMM
@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     topWidget->setLayout(top_box_layout);
     topWidget->setMaximumHeight(450);
     setCentralWidget(topWidget);
-
 
 
     // COMMS Customization
@@ -112,6 +111,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
   //  addDockWidget(Qt::RightDockWidgetArea, pcbw);
 
 
+
    // pcbw->setFloating(true);
     QPoint mw = pos();
     int x = mw.x();
@@ -120,17 +120,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     top_box_layout->addWidget(chartView);
     top_box_layout->addWidget(&comms_log);
 
-    QPixmap p = chartView->grab();
-    QOpenGLWidget *glWidget  = chartView->findChild<QOpenGLWidget*>();
-    if(glWidget){
-        QPainter painter(&p);
-        QPoint d = glWidget->mapToGlobal(QPoint())-chartView->mapToGlobal(QPoint());
-        painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
-        painter.drawImage(d, glWidget->grabFramebuffer());
-        painter.end();
-    }
-
-    p.save("a.png", "PNG");
     main_windows = this;
     // CONNECTING SIGNALS AND SLOTS
 
@@ -206,6 +195,5 @@ void MainWindow::moveEvent(QMoveEvent* event)
 
  void MainWindow::closeEvent(QCloseEvent* event)
  {
-
      pcbw->close();
  }

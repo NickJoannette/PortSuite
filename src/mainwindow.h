@@ -48,7 +48,7 @@ private slots:
 private:
     void moveEvent(QMoveEvent * event);
     void closeEvent(QCloseEvent* event);
-
+    MainWindowMenuBar* main_menu_bar;
     QHBoxLayout * top_box_layout;
     QHBoxLayout* comms_panel_layout;
     MainWindow * main_windows;

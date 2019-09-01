@@ -31,7 +31,7 @@ private:
 
     // MENU DIALOGS
     ExportDialog* data_export_dialog;
-
+    ExportDialog* save_file_dialog ;
 private slots:
         void EXPORT_DATA_CLICKED(QAction* action);
 

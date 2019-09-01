@@ -22,7 +22,8 @@ MainWindowMenuBar::MainWindowMenuBar(MainWindow* parent)
 
        port_menu = new QMenu("Port", parent);
        port_menu->addAction(choose_port_action);
-
+       data_export_dialog = new ExportDialog();
+       data_export_dialog->setMaximumHeight(200);
        addMenu(file_menu);
        addMenu(port_menu);
 
@@ -41,10 +42,7 @@ MainWindowMenuBar::MainWindowMenuBar(MainWindow* parent)
         );
 
 
-       // SETTING UP THE DIALOGS
-
-       data_export_dialog = new ExportDialog();
-       data_export_dialog->setMaximumHeight(200);
+        ExportDialog* save_file_dialog = new ExportDialog();
 
 
        // MENU CONNECTIONS
@@ -61,19 +59,34 @@ void MainWindowMenuBar::EXPORT_DATA_CLICKED(QAction* action)
     qDebug () << "Triggered: " << action->text();
 
     if (action->text() == "Export Data")
-            data_export_dialog->show();
-    else if (action->text() == "Save Plot")
     {
 
+        data_export_dialog->show();
+    }
+
+    else if (action->text() == "Save Plot")
+    {
+        QPixmap p;
+        QOpenGLWidget *glWidget  = parent->chartView->findChild<QOpenGLWidget*>();
+
+        if(glWidget){
+            QPainter painter(&p);
+            QPoint d = glWidget->mapToGlobal(QPoint())-parent->chartView->mapToGlobal(QPoint());
+            painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+            painter.drawImage(d, glWidget->grabFramebuffer());
+            painter.end();
+        }
+           save_file_dialog->show();
+        QString s = save_file_dialog->getSaveFileName();
+        p.save("a.png", "PNG");
     }
 
     else if (action->text() == "Extra Window")
     {
         main_windows = new MainWindow(this);
         main_windows->setWindowTitle("Heart Response");
-        main_windows->chartView->chart()->setTitle("Penis Response");
+        main_windows->chartView->chart()->setTitle("Signal");
         main_windows->show();
-
     }
 
 

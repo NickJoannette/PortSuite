@@ -17,5 +17,7 @@ int main(int argc, char *argv[])
     w.setMaximumSize(max_window_size);
     w.show();
 
+
+
     return a.exec();
 }
