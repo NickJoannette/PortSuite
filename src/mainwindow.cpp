@@ -5,9 +5,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-
-
-
+    
     // MENU
     main_menu_bar = new MainWindowMenuBar(this);
     setMenuBar(main_menu_bar);
@@ -41,8 +39,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // CHART VIEW
 
     // TEST
-
-
+    
     series0 = new QScatterSeries();
     series0->setName("scatter1");
     series0->setMarkerShape(QScatterSeries::MarkerShapeCircle);
