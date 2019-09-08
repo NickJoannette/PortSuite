@@ -1,11 +1,9 @@
-int Hall_Effect_In = A1;
-
+int in = A0;
 void setup() {
 Serial.begin(9600);
+
 }
 
 void loop() {
-  Serial.println(analogRead(Hall_Effect_In));
-//  delay(25);
-
+  Serial.println(analogRead(A0));
 }
