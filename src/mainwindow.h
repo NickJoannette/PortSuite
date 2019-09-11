@@ -25,11 +25,9 @@ class MainWindow : public QMainWindow
 public:
 
     explicit MainWindow(QWidget *parent = 0);
-
     bool formed(std::string const & s)
    {
        QString k;
-
        if (s.find_first_of(".\r@a") != std::string::npos) return false;
        else return true;
    }
@@ -43,8 +41,6 @@ private slots:
 
     void receive_chart_data(unsigned int, unsigned int);
 
-
-
 private:
     void moveEvent(QMoveEvent * event);
     void closeEvent(QCloseEvent* event);
@@ -54,9 +50,6 @@ private:
     MainWindow * main_windows;
     QTextBrowser res;
     bool LED1_IS_ON = false;
-
-
-
 
     // UI SECTION LABELS
     // coms
@@ -74,14 +67,12 @@ private:
 
     // SERIAL INTERACTION
     PortControlButtonWidget * pcbw;
+    
     // Layout Partition Labels
-
     QLabel transmission_label;
     QLabel reception_label;
 
-
     // Buttons and variables
-
     unsigned int total_bytes_read = 0;
 
     // Serial communicator
@@ -93,10 +84,7 @@ private:
     // Serial Data Management
     unsigned int data_value_sum = 0;
     float average_data_value = 0;
-
-
+    
 };
-
-
 
 #endif // MAINWINDOW_H
