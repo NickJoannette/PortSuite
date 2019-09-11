@@ -23,10 +23,11 @@ void SerialCommunicator::SERIAL_INTERACT()
     unsigned int p;
 
     try{
+        // This is configured for a sensor which communicates voltage values between 400 and 800; eliminating values less than
+        // 100 gets rid of anomalies
            p = stoi(s);
            if (p>100){
            ++bytes_read;
-          // qDebug() << "Sent: " << bytes_read << ", " << p << "\n";
            emit(send_chart_data(bytes_read, p));
 
        }
